@@ -24,7 +24,7 @@ class EnemyType1Controller{
       this.sprite.kill();
       Nakama.enemies.splice(Nakama.enemies.indexOf(this), 1);
     }
-    if(this.sprite.alive && this.timeSpriteAlive >= 0.5)
+    if(this.sprite.alive && this.timeSpriteAlive >= 1)
       this.fire();
   }
 

@@ -18,11 +18,11 @@ class EnemyType2Controller {
   update(){
     this.timeSpriteAlive += Nakama.game.time.physicsElapsed;
     //kill this enemy after 1.5s.
-    if(this.timeSpriteAlive >= 1.5) {
+    if(this.timeSpriteAlive >= 2) {
       this.sprite.kill();
       Nakama.enemies.splice(Nakama.enemies.indexOf(this),1);
     }
-    if(this.sprite.alive && this.timeSpriteAlive > 0.5) this.fire();
+    if(this.sprite.alive && this.timeSpriteAlive > 1) this.fire();
   }
 
   createLaser(angle, anchor, configs){
