@@ -18,6 +18,7 @@ class EnemyLaserController {
         this.sprite.kill();
         Nakama.enemyLaser.splice(Nakama.enemyLaser.indexOf(this), 1);
       }
+    //Make the laser move with enemy
     this.sprite.position.x = Nakama.updatePosition.x;
     this.sprite.position.y = Nakama.updatePosition.y;
   }

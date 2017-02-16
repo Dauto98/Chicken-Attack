@@ -7,7 +7,9 @@ Nakama.configs = {
     right : Phaser.Keyboard.RIGHT
   },
   chickenHealth : 5,
-  enemySpeed    : 30,
+  enemyType1Speed    : 30,
+  enemyType2Speed    : 50,
+  timeToSpawnAnEnemy : 3
 };
 
 window.onload = function(){
@@ -54,8 +56,8 @@ var create = function(){
       chickenSpeed : 300
     }));
   Nakama.timeToSpawnAnEnemy = 0;
-  Nakama.block.push(new SpinningBlockType1Controller(300,300));
-  Nakama.block.push(new SpinningBlockType2Controller(300,600));
+//  Nakama.block.push(new SpinningBlockType1Controller(300,300));
+//  Nakama.block.push(new SpinningBlockType2Controller(300,600));
 }
 
 // update game state each frame
@@ -77,14 +79,36 @@ var update = function(){
     Nakama.enemyLaser[i].update();
   }
 
-  if(Nakama.timeToSpawnAnEnemy >= 5) {
-    Nakama.enemies.push(new EnemyController(
-    620, Math.floor(Math.random()*600 + 100),
-    Math.floor(Math.random()+1)
-    ));
-    Nakama.timeToSpawnAnEnemy = 0;
+  //randomly create an enemy between type 1 and type 2 after each ... seconds.
+  if(Nakama.timeToSpawnAnEnemy >= Nakama.configs.timeToSpawnAnEnemy) {
+    if(Math.round(Math.random()>=0.5)){
+      Nakama.enemies.push(new EnemyType1Controller(
+      //random position.y and directionType for this enemy.
+      620, Math.round(Math.random()*600 + 100),
+      Math.round(Math.random()+1)
+      ));
+      Nakama.timeToSpawnAnEnemy = 0;
+    }
+    else{
+      Nakama.enemies.push(new EnemyType2Controller(
+      //random position.x and directionType for this enemy.
+        Math.round(Math.random()*540 + 50), 20,
+        Math.round(Math.random()+1)
+      ));
+      Nakama.timeToSpawnAnEnemy = 0;
+    }
   }
+
+  Nakama.game.physics.arcade.overlap(
+    Nakama.laserGroup,
+    Nakama.chickenGroup,
+    onLaserHitChicken);
 }
 
 // before camera render (mostly for debug)
 var render = function(){}
+
+
+var onLaserHitChicken = function(laserSprite, chickenSprite){
+  chickenSprite.damage(1);
+}

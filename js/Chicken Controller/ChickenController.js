@@ -5,7 +5,7 @@ class ChickenController {
       x,
       y,
       "chicken");
-    this.sprite.scale.setTo(0.15,0.15)
+    this.sprite.scale.setTo(0.15,0.15);
     this.sprite.anchor = new Phaser.Point(0.5 , 0.5);
     this.configs = configs;
     this.sprite.animations.add('walk');
@@ -15,6 +15,7 @@ class ChickenController {
 }
 
 update(){
+  //moving features and changing frame while moving.
     if(Nakama.keyboard.isDown(Nakama.configs.keyboard.up)){
       this.sprite.body.velocity.y = -this.configs.chickenSpeed;
       this.sprite.animations.play('walk',this.chickenFramePerSecond,true);
@@ -33,7 +34,7 @@ update(){
       this.sprite.body.velocity.x = this.configs.chickenSpeed;
       this.sprite.animations.play('walk',this.chickenFramePerSecond,true);
     }
-
     else this.sprite.body.velocity.x = 0;
+    console.log(this.sprite.health);
   }
 }
