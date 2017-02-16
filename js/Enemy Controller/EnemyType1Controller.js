@@ -15,6 +15,7 @@ class EnemyType1Controller{
     this.timeSpriteAlive = 0;
     this.sprite.body.velocity =
       this.direction.setMagnitude(Nakama.configs.enemyType1Speed);
+    this.sprite.body.collideWorldBounds = true;
   }
 
   update(){
@@ -29,16 +30,18 @@ class EnemyType1Controller{
   }
 
   createLaser(angle, anchor, configs){
-    Nakama.updatePosition = this.sprite.position;
     Nakama.enemyLaser.push(new EnemyLaserController(
       this.sprite.position,
       angle,
       anchor,
+      this.sprite,
       configs
     ));
   }
 
   fire(){
-    this.createLaser(90 , new Phaser.Point(0.5, 0));
+    if(Nakama.enemyLaser.length == 0){
+      this.createLaser(90 , new Phaser.Point(0.5, 0));
+    }
   }
 }

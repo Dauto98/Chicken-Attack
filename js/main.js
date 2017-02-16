@@ -6,10 +6,13 @@ Nakama.configs = {
     left  : Phaser.Keyboard.LEFT,
     right : Phaser.Keyboard.RIGHT
   },
-  chickenHealth : 5,
-  enemyType1Speed    : 30,
-  enemyType2Speed    : 50,
-  timeToSpawnAnEnemy : 3
+  chickenHealth       : 50000,
+  chickenSpeed        : 400,
+  enemyType1Speed     : 30,
+  enemyType2Speed     : 50,
+  enemyBulletSpeed    : 300,
+  enemyBulletCooldown : 0.4,
+  timeToSpawnAnEnemy  : 5
 };
 
 window.onload = function(){
@@ -44,17 +47,16 @@ var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
   Nakama.keyboard = Nakama.game.input.keyboard;
   Nakama.chickenGroup = Nakama.game.add.physicsGroup();
-  Nakama.blockGroup = Nakama.game.add.physicsGroup();
-  Nakama.enemyGroup = Nakama.game.add.physicsGroup();
-  Nakama.laserGroup = Nakama.game.add.physicsGroup();
-  Nakama.chicken = [];
-  Nakama.enemies = [];
-  Nakama.enemyLaser = [];
-  Nakama.block = [];
-  Nakama.chicken.push(new ChickenController(300,800,
-    {
-      chickenSpeed : 300
-    }));
+  Nakama.bulletGroup  = Nakama.game.add.physicsGroup();
+  Nakama.blockGroup   = Nakama.game.add.physicsGroup();
+  Nakama.enemyGroup   = Nakama.game.add.physicsGroup();
+  Nakama.laserGroup   = Nakama.game.add.physicsGroup();
+  Nakama.chicken      = [];
+  Nakama.enemies      = [];
+  Nakama.block        = [];
+  Nakama.enemyLaser   = [];
+  Nakama.enemyBullet  = [];
+  Nakama.chicken.push(new ChickenController(300,800));
   Nakama.timeToSpawnAnEnemy = 0;
 //  Nakama.block.push(new SpinningBlockType1Controller(300,300));
 //  Nakama.block.push(new SpinningBlockType2Controller(300,600));
@@ -74,7 +76,6 @@ var update = function(){
   for(var i = 0; i < Nakama.enemies.length; i++){
     Nakama.enemies[i].update();
   }
-
   for(var i = 0; i < Nakama.enemyLaser.length; i++){
     Nakama.enemyLaser[i].update();
   }
@@ -92,23 +93,42 @@ var update = function(){
     else{
       Nakama.enemies.push(new EnemyType2Controller(
       //random position.x and directionType for this enemy.
-        Math.round(Math.random()*540 + 50), 20,
+      20,Math.round(Math.random()*600 + 100),
         Math.round(Math.random()+1)
       ));
       Nakama.timeToSpawnAnEnemy = 0;
     }
   }
 
+//check overlap for every sprite in 2 array Chicken and EnemyLaser
+for(var i = 0; i < Nakama.chicken.length; i++){
+  for(var j = 0; j < Nakama.enemyLaser.length; j++){
+    if(checkOverlap(Nakama.enemyLaser[j].sprite, Nakama.chicken[i].sprite))
+      Nakama.chicken[i].sprite.damage(1);
+    }
+  }
+
   Nakama.game.physics.arcade.overlap(
-    Nakama.laserGroup,
+    Nakama.bulletGroup,
     Nakama.chickenGroup,
-    onLaserHitChicken);
+    onBulletHitChicken
+  )
 }
 
 // before camera render (mostly for debug)
-var render = function(){}
+var render = function(){
+  Nakama.game.debug.body;
+}
 
+//Check if two sprites overlap or not.
+//Check Sprite image, not body physic ( overlap without physics)
+function checkOverlap(laserSprite, chickenSprite){
+  var boundsLaserSprite = laserSprite.getBounds();
+  var boundsChickenSprite = chickenSprite.getBounds();
+  return Phaser.Rectangle.intersects(boundsLaserSprite , boundsChickenSprite);
+}
 
-var onLaserHitChicken = function(laserSprite, chickenSprite){
+var onBulletHitChicken = function(bulletSprite, chickenSprite){
+  bulletSprite.kill();
   chickenSprite.damage(1);
 }
