@@ -44,7 +44,7 @@ class MovingBlockController{
       this.configs.movementDistance *
       Math.sin(this.timeSinceLastSpawn/this.configs.tweenTime * Math.PI * 2)
       * this.directionIndex;
-    console.log(this.timeMoving);
+    // console.log(this.timeMoving);
     }
   }
 }

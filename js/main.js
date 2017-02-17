@@ -1,6 +1,5 @@
 var Nakama = {};
 Nakama.configs = {
-<<<<<<< HEAD
   keyboard : {
     up    : Phaser.Keyboard.UP,
     down  : Phaser.Keyboard.DOWN,
@@ -13,10 +12,8 @@ Nakama.configs = {
   enemyType2Speed     : 50,
   enemyBulletSpeed    : 300,
   enemyBulletCooldown : 0.4,
-  timeToSpawnAnEnemy  : 5
-=======
-  linesSpeed : 500
->>>>>>> master
+  timeToSpawnAnEnemy  : 5,
+  linesSpeed : 300
 };
 
 window.onload = function(){
@@ -42,36 +39,45 @@ var preload = function(){
   Nakama.game.time.advancedTiming = true;
 
   Nakama.game.load.atlasJSONHash('assets', 'Assets/assets.png', 'Assets/assets.json');
-<<<<<<< HEAD
-  Nakama.game.load.image('background', 'Assets/Map1.png');
+  Nakama.game.load.atlasJSONHash('sheet1', 'Assets/Spritesheet-1.png', 'Assets/Spritesheet-1.json');
+  Nakama.game.load.atlasJSONHash('sheet2', 'Assets/Spritesheet-2.png', 'Assets/Spritesheet-2.json');
+  Nakama.game.load.atlasJSONHash('sheet3', 'Assets/Spritesheet-3.png', 'Assets/Spritesheet-3.json');
   Nakama.game.load.spritesheet('chicken', 'Assets/chicken.png', 389, 504);
-=======
-  Nakama.game.load.image('gray_background', 'Assets/gray_background.png');
-  Nakama.game.load.image('red_background', 'Assets/red_background.png');
-  Nakama.game.load.image('straght_line', 'Assets/main_line.png');
-  Nakama.game.load.image('hole_line', 'Assets/line1.png');
-  Nakama.game.load.image('thin_line', 'Assets/thin_line.png');
->>>>>>> master
 }
 
 // initialize the game
 var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
   Nakama.keyboard = Nakama.game.input.keyboard;
-<<<<<<< HEAD
-  Nakama.chickenGroup = Nakama.game.add.physicsGroup();
-  Nakama.bulletGroup  = Nakama.game.add.physicsGroup();
-  Nakama.blockGroup   = Nakama.game.add.physicsGroup();
-  Nakama.enemyGroup   = Nakama.game.add.physicsGroup();
-  Nakama.laserGroup   = Nakama.game.add.physicsGroup();
+
+  Nakama.backgroundLeft = Nakama.game.add.tileSprite(0, 0, 320, 960, "sheet1", "Map.png");
+  Nakama.backgroundRight = Nakama.game.add.tileSprite(320, 0, 320, 960, "sheet1", "Map3.png");
+
+  Nakama.graph = Nakama.game.add.graphics(Nakama.game.width/2, 0);
+  Nakama.graph.lineStyle(5, 0xECEFF1);
+  Nakama.graph.lineTo(0, Nakama.game.height);
+
+  Nakama.leftLinesGroup  = Nakama.game.add.physicsGroup();
+  Nakama.rightLinesGroup = Nakama.game.add.physicsGroup();
+  Nakama.chickenGroup    = Nakama.game.add.physicsGroup();
+  Nakama.bulletGroup     = Nakama.game.add.physicsGroup();
+  Nakama.blockGroup      = Nakama.game.add.physicsGroup();
+  Nakama.enemyGroup      = Nakama.game.add.physicsGroup();
+  Nakama.laserGroup      = Nakama.game.add.physicsGroup();
+
   Nakama.chicken      = [];
   Nakama.enemies      = [];
   Nakama.block        = [];
   Nakama.enemyLaser   = [];
   Nakama.enemyBullet  = [];
+
   Nakama.timeToSpawnAnEnemy = 0;
-//  Nakama.block.push(new SpinningBlockType1Controller(300,300));
-//  Nakama.block.push(new SpinningBlockType2Controller(300,600));
+
+  new Lines_longStraight(160, Nakama.leftLinesGroup);
+  new Lines_longStraight(480, Nakama.rightLinesGroup);
+
+  // Nakama.block.push(new SpinningBlockType1Controller(300,300));
+  // Nakama.block.push(new SpinningBlockType2Controller(300,600));
   Nakama.block.push(new MovingBlockController(280,300,1,
   {
     minX  : 80,
@@ -93,30 +99,26 @@ var create = function(){
     tweenTime : 3,
     timeDelay : 1
   }));
+
   Nakama.chicken.push(new ChickenController(300,800));
-=======
-
-  Nakama.backgroundLeft = Nakama.game.add.tileSprite(0, 0, 320, 960, "gray_background");
-  Nakama.backgroundRight = Nakama.game.add.tileSprite(320, 0, 320, 960, "red_background");
-
-  Nakama.graph = Nakama.game.add.graphics(Nakama.game.width/2, 0);
-  Nakama.graph.lineStyle(5, 0xECEFF1);
-  Nakama.graph.lineTo(0, Nakama.game.height);
-
-  Nakama.leftLinesGroup = Nakama.game.add.physicsGroup();
-  Nakama.rightLinesGroup = Nakama.game.add.physicsGroup();
-
-  new Lines_longStraight(160, Nakama.leftLinesGroup);
-  new Lines_longStraight(480, Nakama.rightLinesGroup);
->>>>>>> master
 }
 
 // update game state each frame
 var update = function(){
-<<<<<<< HEAD
   //bring the chicken sprite on top of others.
-  Nakama.game.world.bringToTop(Nakama.chickenGroup)
-;
+  Nakama.game.world.bringToTop(Nakama.chickenGroup);
+
+  Nakama.backgroundLeft.tilePosition.y += 1;
+  Nakama.backgroundRight.tilePosition.y += 1;
+
+  if (Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].position.y >= Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].height/2 - 10) {
+    randomLines(Nakama.leftLinesGroup);
+  }
+
+  if (Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].position.y >= Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].height/2 - 10) {
+    randomLines(Nakama.rightLinesGroup);
+  }
+
   Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
   for(var i = 0; i < Nakama.chicken.length; i++){
     Nakama.chicken[i].update();
@@ -136,36 +138,26 @@ var update = function(){
   //randomly create an enemy between type 1 and type 2 after each ... seconds.
   if(Nakama.timeToSpawnAnEnemy >= Nakama.configs.timeToSpawnAnEnemy) {
     if(Math.round(Math.random()>=0.5)){
-      Nakama.enemies.push(new EnemyType1Controller(
       //random position.y and directionType for this enemy.
-      620, Math.round(Math.random()*600 + 100),
-      Math.round(Math.random()+1)
-      ));
+      Nakama.enemies.push(new EnemyType1Controller(620, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
       Nakama.timeToSpawnAnEnemy = 0;
     }
     else{
-      Nakama.enemies.push(new EnemyType2Controller(
       //random position.x and directionType for this enemy.
-      20,Math.round(Math.random()*600 + 100),
-        Math.round(Math.random()+1)
-      ));
+      Nakama.enemies.push(new EnemyType2Controller(20, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
       Nakama.timeToSpawnAnEnemy = 0;
     }
   }
 
-//check overlap for every sprite in 2 array Chicken and EnemyLaser
-for(var i = 0; i < Nakama.chicken.length; i++){
-  for(var j = 0; j < Nakama.enemyLaser.length; j++){
-    if(checkOverlap(Nakama.enemyLaser[j].sprite, Nakama.chicken[i].sprite))
-      Nakama.chicken[i].sprite.damage(1);
+  //check overlap for every sprite in 2 array Chicken and EnemyLaser
+  for(var i = 0; i < Nakama.chicken.length; i++){
+    for(var j = 0; j < Nakama.enemyLaser.length; j++){
+      if(checkOverlap(Nakama.enemyLaser[j].sprite, Nakama.chicken[i].sprite))
+        Nakama.chicken[i].sprite.damage(1);
+      }
     }
-  }
 
-  Nakama.game.physics.arcade.overlap(
-    Nakama.bulletGroup,
-    Nakama.chickenGroup,
-    onBulletHitChicken
-  )
+  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.chickenGroup, onBulletHitChicken);
 }
 
 // before camera render (mostly for debug)
@@ -184,21 +176,7 @@ function checkOverlap(laserSprite, chickenSprite){
 var onBulletHitChicken = function(bulletSprite, chickenSprite){
   bulletSprite.kill();
   chickenSprite.damage(1);
-=======
-  Nakama.backgroundLeft.tilePosition.y += 1;
-  Nakama.backgroundRight.tilePosition.y += 1;
-
-  if (Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].position.y >= Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].height/2 - 10) {
-    randomLines(Nakama.leftLinesGroup);
-  }
-
-  if (Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].position.y >= Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].height/2 - 10) {
-    randomLines(Nakama.rightLinesGroup);
-  }
 }
-
-// before camera render (mostly for debug)
-var render = function(){}
 
 var randomLines = function(linesGroup){
   var x = 0;
@@ -208,13 +186,31 @@ var randomLines = function(linesGroup){
     x = 480;
   }
 
-  var lineID = Math.floor(Math.random() * 2);
+  var lineID = Math.floor(Math.random() * 8);
   switch (lineID) {
     case 0:
+      new Lines_roundHole(x, linesGroup);
+      break;
+    case 1:
       new Lines_longStraight(x, linesGroup);
       break;
-    default:
-      new Lines_hole(x, linesGroup);
+    case 2:
+      new Lines_squareHole(x, linesGroup);
+      break;
+    case 3:
+      new Lines_hexaHole(x, linesGroup);
+      break;
+    case 4:
+      new Lines_octaHole(x, linesGroup);
+      break;
+    case 5:
+      new Lines_pointLeft(x, linesGroup);
+      break;
+    case 6:
+      new Lines_pointRight(x, linesGroup);
+      break;
+    case 7:
+      new Lines_eightHole(x, linesGroup);
+      break;
   }
->>>>>>> master
 }

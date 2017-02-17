@@ -1,7 +1,8 @@
 class LineController {
-	constructor(x, spriteName, linesGroup, anchor){
-		this.straghtLine = linesGroup.create(x, -480, spriteName);
-		this.straghtLine.anchor = anchor;
-		this.straghtLine.body.velocity.y = Nakama.configs.linesSpeed;
+	constructor(x, key, spriteName, linesGroup, anchor){
+		this.sprite = linesGroup.create(x, -480, key, spriteName);
+		this.sprite.anchor = anchor;
+		this.sprite.body.velocity.y = Nakama.configs.linesSpeed;
+		this.sprite.scale.setTo(0.5,0.5);
 	}
 }

@@ -35,6 +35,6 @@ update(){
       this.sprite.animations.play('walk',this.chickenFramePerSecond,true);
     }
     else this.sprite.body.velocity.x = 0;
-    console.log(this.sprite.health);
+    // console.log(this.sprite.health);
   }
 }
