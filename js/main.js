@@ -1,5 +1,7 @@
 var Nakama = {};
-Nakama.configs = {};
+Nakama.configs = {
+  linesSpeed : 500
+};
 
 window.onload = function(){
   Nakama.game = new Phaser.Game(640,960,Phaser.AUTO,'',
@@ -28,6 +30,7 @@ var preload = function(){
   Nakama.game.load.image('red_background', 'Assets/red_background.png');
   Nakama.game.load.image('straght_line', 'Assets/main_line.png');
   Nakama.game.load.image('hole_line', 'Assets/line1.png');
+  Nakama.game.load.image('thin_line', 'Assets/thin_line.png');
 }
 
 // initialize the game
@@ -42,16 +45,11 @@ var create = function(){
   Nakama.graph.lineStyle(5, 0xECEFF1);
   Nakama.graph.lineTo(0, Nakama.game.height);
 
-  Nakama.linesGroup = Nakama.game.add.physicsGroup();
+  Nakama.leftLinesGroup = Nakama.game.add.physicsGroup();
+  Nakama.rightLinesGroup = Nakama.game.add.physicsGroup();
 
-  Nakama.straghtLine = Nakama.linesGroup.create(160, -480, 'straght_line');
-  Nakama.straghtLine.anchor = new Phaser.Point(0.5, 0.5);
-  Nakama.straghtLine.body.velocity.y = 300;
-
-  Nakama.holeLine = Nakama.linesGroup.create(160, -480, 'hole_line');
-  Nakama.holeLine.anchor = new Phaser.Point(0.5, 0.5);
-
-  Nakama.set = false;
+  new Lines_longStraight(160, Nakama.leftLinesGroup);
+  new Lines_longStraight(480, Nakama.rightLinesGroup);
 }
 
 // update game state each frame
@@ -59,16 +57,32 @@ var update = function(){
   Nakama.backgroundLeft.tilePosition.y += 1;
   Nakama.backgroundRight.tilePosition.y += 1;
 
-  if (Nakama.set === false) {
-    if (Nakama.straghtLine.position.y >= Nakama.straghtLine.height/2) {
-      Nakama.holeLine.position.x = Nakama.straghtLine.position.x;
-      Nakama.holeLine.position.y = Nakama.straghtLine.position.y - (Nakama.holeLine.height + Nakama.straghtLine.height)/2;
-      Nakama.holeLine.body.velocity.y = 300;
-      Nakama.set = true;
-    }
+  if (Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].position.y >= Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].height/2 - 10) {
+    randomLines(Nakama.leftLinesGroup);
   }
 
+  if (Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].position.y >= Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].height/2 - 10) {
+    randomLines(Nakama.rightLinesGroup);
+  }
 }
 
 // before camera render (mostly for debug)
 var render = function(){}
+
+var randomLines = function(linesGroup){
+  var x = 0;
+    if (linesGroup === Nakama.leftLinesGroup) {
+    x = 160;
+  } else {
+    x = 480;
+  }
+
+  var lineID = Math.floor(Math.random() * 2);
+  switch (lineID) {
+    case 0:
+      new Lines_longStraight(x, linesGroup);
+      break;
+    default:
+      new Lines_hole(x, linesGroup);
+  }
+}
