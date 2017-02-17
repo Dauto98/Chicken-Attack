@@ -1,0 +1,39 @@
+{"frames": [
+
+{
+	"filename": "Line4.png",
+	"frame": {"x":1,"y":1,"w":664,"h":2000},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":664,"h":2000},
+	"sourceSize": {"w":664,"h":2000},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Line6.png",
+	"frame": {"x":1326,"y":1,"w":396,"h":2000},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":396,"h":2000},
+	"sourceSize": {"w":396,"h":2000},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "line7.png",
+	"frame": {"x":667,"y":1,"w":657,"h":2000},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":657,"h":2000},
+	"sourceSize": {"w":657,"h":2000},
+	"pivot": {"x":0.5,"y":0.5}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Spritesheet-3.png",
+	"format": "RGBA8888",
+	"size": {"w":1723,"h":2002},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:61c680a0a68aec893b3d78aaa24501b0:35a9fab3080897e26eaae3638187bdd1:12ecb94c50eafa79733e32db5e640e81$"
+}
+}
