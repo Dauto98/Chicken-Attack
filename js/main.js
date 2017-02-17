@@ -56,14 +56,38 @@ var create = function(){
   Nakama.block        = [];
   Nakama.enemyLaser   = [];
   Nakama.enemyBullet  = [];
-  Nakama.chicken.push(new ChickenController(300,800));
   Nakama.timeToSpawnAnEnemy = 0;
 //  Nakama.block.push(new SpinningBlockType1Controller(300,300));
 //  Nakama.block.push(new SpinningBlockType2Controller(300,600));
+  Nakama.block.push(new MovingBlockController(280,300,1,
+  {
+    minX  : 80,
+    maxX  : 480,
+    tweenTime : 3,
+    timeDelay : 1
+  }));
+  Nakama.block.push(new MovingBlockController(280,350,2,
+  {
+    minX  : 80,
+    maxX  : 480,
+    tweenTime : 3,
+    timeDelay : 1
+  }));
+  Nakama.block.push(new MovingBlockController(280,400,1,
+  {
+    minX  : 80,
+    maxX  : 480,
+    tweenTime : 3,
+    timeDelay : 1
+  }));
+  Nakama.chicken.push(new ChickenController(300,800));
 }
 
 // update game state each frame
 var update = function(){
+  //bring the chicken sprite on top of others.
+  Nakama.game.world.bringToTop(Nakama.chickenGroup)
+;
   Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
   for(var i = 0; i < Nakama.chicken.length; i++){
     Nakama.chicken[i].update();
