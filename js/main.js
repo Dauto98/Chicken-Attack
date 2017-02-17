@@ -1,5 +1,6 @@
 var Nakama = {};
 Nakama.configs = {
+<<<<<<< HEAD
   keyboard : {
     up    : Phaser.Keyboard.UP,
     down  : Phaser.Keyboard.DOWN,
@@ -13,6 +14,9 @@ Nakama.configs = {
   enemyBulletSpeed    : 300,
   enemyBulletCooldown : 0.4,
   timeToSpawnAnEnemy  : 5
+=======
+  linesSpeed : 500
+>>>>>>> master
 };
 
 window.onload = function(){
@@ -38,14 +42,23 @@ var preload = function(){
   Nakama.game.time.advancedTiming = true;
 
   Nakama.game.load.atlasJSONHash('assets', 'Assets/assets.png', 'Assets/assets.json');
+<<<<<<< HEAD
   Nakama.game.load.image('background', 'Assets/Map1.png');
   Nakama.game.load.spritesheet('chicken', 'Assets/chicken.png', 389, 504);
+=======
+  Nakama.game.load.image('gray_background', 'Assets/gray_background.png');
+  Nakama.game.load.image('red_background', 'Assets/red_background.png');
+  Nakama.game.load.image('straght_line', 'Assets/main_line.png');
+  Nakama.game.load.image('hole_line', 'Assets/line1.png');
+  Nakama.game.load.image('thin_line', 'Assets/thin_line.png');
+>>>>>>> master
 }
 
 // initialize the game
 var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
   Nakama.keyboard = Nakama.game.input.keyboard;
+<<<<<<< HEAD
   Nakama.chickenGroup = Nakama.game.add.physicsGroup();
   Nakama.bulletGroup  = Nakama.game.add.physicsGroup();
   Nakama.blockGroup   = Nakama.game.add.physicsGroup();
@@ -81,10 +94,26 @@ var create = function(){
     timeDelay : 1
   }));
   Nakama.chicken.push(new ChickenController(300,800));
+=======
+
+  Nakama.backgroundLeft = Nakama.game.add.tileSprite(0, 0, 320, 960, "gray_background");
+  Nakama.backgroundRight = Nakama.game.add.tileSprite(320, 0, 320, 960, "red_background");
+
+  Nakama.graph = Nakama.game.add.graphics(Nakama.game.width/2, 0);
+  Nakama.graph.lineStyle(5, 0xECEFF1);
+  Nakama.graph.lineTo(0, Nakama.game.height);
+
+  Nakama.leftLinesGroup = Nakama.game.add.physicsGroup();
+  Nakama.rightLinesGroup = Nakama.game.add.physicsGroup();
+
+  new Lines_longStraight(160, Nakama.leftLinesGroup);
+  new Lines_longStraight(480, Nakama.rightLinesGroup);
+>>>>>>> master
 }
 
 // update game state each frame
 var update = function(){
+<<<<<<< HEAD
   //bring the chicken sprite on top of others.
   Nakama.game.world.bringToTop(Nakama.chickenGroup)
 ;
@@ -155,4 +184,37 @@ function checkOverlap(laserSprite, chickenSprite){
 var onBulletHitChicken = function(bulletSprite, chickenSprite){
   bulletSprite.kill();
   chickenSprite.damage(1);
+=======
+  Nakama.backgroundLeft.tilePosition.y += 1;
+  Nakama.backgroundRight.tilePosition.y += 1;
+
+  if (Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].position.y >= Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].height/2 - 10) {
+    randomLines(Nakama.leftLinesGroup);
+  }
+
+  if (Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].position.y >= Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].height/2 - 10) {
+    randomLines(Nakama.rightLinesGroup);
+  }
+}
+
+// before camera render (mostly for debug)
+var render = function(){}
+
+var randomLines = function(linesGroup){
+  var x = 0;
+    if (linesGroup === Nakama.leftLinesGroup) {
+    x = 160;
+  } else {
+    x = 480;
+  }
+
+  var lineID = Math.floor(Math.random() * 2);
+  switch (lineID) {
+    case 0:
+      new Lines_longStraight(x, linesGroup);
+      break;
+    default:
+      new Lines_hole(x, linesGroup);
+  }
+>>>>>>> master
 }
