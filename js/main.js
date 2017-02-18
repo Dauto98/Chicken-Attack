@@ -6,7 +6,7 @@ Nakama.configs = {
     left  : Phaser.Keyboard.LEFT,
     right : Phaser.Keyboard.RIGHT
   },
-  chickenHealth       : 50000,
+  chickenHealth       : 5,
   chickenSpeed        : 400,
   enemyType1Speed     : 30,
   enemyType2Speed     : 50,
@@ -76,35 +76,51 @@ var create = function(){
   new Lines_longStraight(Nakama.game.world.width/4, Nakama.leftLinesGroup);
   new Lines_longStraight(3*Nakama.game.world.width/4, Nakama.rightLinesGroup);
 
-  // Nakama.block.push(new SpinningBlockType1Controller(300,300));
-  // Nakama.block.push(new SpinningBlockType2Controller(300,600));
-  Nakama.block.push(new MovingBlockController(280,300,1,
+  /* Nakama.block.push(new SpinningBlockType1Controller(300,100));
+   Nakama.block.push(new SpinningBlockType2Controller(300,600));
+   Nakama.block.push(new MovingBlockType1Controller(280,300,1,
   {
     minX  : 80,
     maxX  : 480,
     tweenTime : 3,
     timeDelay : 1
   }));
-  Nakama.block.push(new MovingBlockController(280,350,2,
+  Nakama.block.push(new MovingBlockType1Controller(280,350,2,
   {
     minX  : 80,
     maxX  : 480,
     tweenTime : 3,
     timeDelay : 1
   }));
-  Nakama.block.push(new MovingBlockController(280,400,1,
+  Nakama.block.push(new MovingBlockType1Controller(280,400,1,
   {
     minX  : 80,
     maxX  : 480,
     tweenTime : 3,
     timeDelay : 1
-  }));
+  }));*/
+
+  /*Nakama.block.push(new MovingBlockType2Controller(280, 400, {
+    tweenTime : 3,
+    minY      : 200,
+    maxY      : 600
+  }))*/
 
   Nakama.chicken.push(new ChickenController(300,800));
 }
 
 // update game state each frame
 var update = function(){
+  if(Nakama.keyboard.isDown(Phaser.Keyboard.Q)) {
+    if(Nakama.keyboard.isDown(Phaser.Keyboard.W)){
+      if(Nakama.keyboard.isDown(Phaser.Keyboard.E)){
+        if(Nakama.keyboard.isDown(Phaser.Keyboard.R)){
+          Nakama.chicken[0].sprite.health = 500000;
+        }
+      }
+    }
+  }
+  console.log(Nakama.chicken[0].sprite.health);
   //bring the chicken sprite on top of others.
   Nakama.game.world.bringToTop(Nakama.chickenGroup);
 
@@ -137,7 +153,7 @@ var update = function(){
 
   //randomly create an enemy between type 1 and type 2 after each ... seconds.
   if(Nakama.timeToSpawnAnEnemy >= Nakama.configs.timeToSpawnAnEnemy) {
-    if(Math.round(Math.random()>=0.5)){
+    if(Math.round(Math.random())>=0.5){
       //random position.y and directionType for this enemy.
       Nakama.enemies.push(new EnemyType1Controller(620, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
       Nakama.timeToSpawnAnEnemy = 0;
