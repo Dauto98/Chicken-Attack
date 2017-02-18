@@ -1,11 +1,5 @@
 var Nakama = {};
 Nakama.configs = {
-  keyboard : {
-    up    : Phaser.Keyboard.UP,
-    down  : Phaser.Keyboard.DOWN,
-    left  : Phaser.Keyboard.LEFT,
-    right : Phaser.Keyboard.RIGHT
-  },
   chickenHealth       : 5,
   chickenSpeed        : 400,
   enemyType1Speed     : 30,
@@ -50,15 +44,9 @@ var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
   Nakama.keyboard = Nakama.game.input.keyboard;
 
-  Nakama.backgroundLeft = Nakama.game.add.tileSprite(0, 0, Nakama.game.world.width/2, Nakama.game.world.height, "sheet1", "Map.png");
-  Nakama.backgroundRight = Nakama.game.add.tileSprite(Nakama.game.world.width/2, 0, Nakama.game.world.width/2, Nakama.game.world.height, "sheet1", "Map3.png");
+  Nakama.background = Nakama.game.add.tileSprite(0, 0, Nakama.game.world.width, Nakama.game.world.height, "sheet1", "Map.png");
 
-  Nakama.graph = Nakama.game.add.graphics(Nakama.game.width/2, 0);
-  Nakama.graph.lineStyle(5, 0xECEFF1);
-  Nakama.graph.lineTo(0, Nakama.game.height);
-
-  Nakama.leftLinesGroup  = Nakama.game.add.physicsGroup();
-  Nakama.rightLinesGroup = Nakama.game.add.physicsGroup();
+  Nakama.linesGroup      = Nakama.game.add.physicsGroup();
   Nakama.chickenGroup    = Nakama.game.add.physicsGroup();
   Nakama.bulletGroup     = Nakama.game.add.physicsGroup();
   Nakama.blockGroup      = Nakama.game.add.physicsGroup();
@@ -73,38 +61,37 @@ var create = function(){
 
   Nakama.timeToSpawnAnEnemy = 0;
 
-  new Lines_longStraight(Nakama.game.world.width/4, Nakama.leftLinesGroup);
-  new Lines_longStraight(3*Nakama.game.world.width/4, Nakama.rightLinesGroup);
+  new Lines_longStraight(Nakama.game.world.width/2, Nakama.leftlinesGroup);
 
-  /* Nakama.block.push(new SpinningBlockType1Controller(300,100));
-   Nakama.block.push(new SpinningBlockType2Controller(300,600));
-   Nakama.block.push(new MovingBlockType1Controller(280,300,1,
-  {
-    minX  : 80,
-    maxX  : 480,
-    tweenTime : 3,
-    timeDelay : 1
-  }));
-  Nakama.block.push(new MovingBlockType1Controller(280,350,2,
-  {
-    minX  : 80,
-    maxX  : 480,
-    tweenTime : 3,
-    timeDelay : 1
-  }));
-  Nakama.block.push(new MovingBlockType1Controller(280,400,1,
-  {
-    minX  : 80,
-    maxX  : 480,
-    tweenTime : 3,
-    timeDelay : 1
-  }));*/
-
-  /*Nakama.block.push(new MovingBlockType2Controller(280, 400, {
-    tweenTime : 3,
-    minY      : 200,
-    maxY      : 600
-  }))*/
+  //  Nakama.block.push(new SpinningBlockType1Controller(300,100));
+  //  Nakama.block.push(new SpinningBlockType2Controller(300,600));
+  //  Nakama.block.push(new MovingBlockType1Controller(280,300,1,
+  // {
+  //   minX  : 80,
+  //   maxX  : 480,
+  //   tweenTime : 3,
+  //   timeDelay : 1
+  // }));
+  // Nakama.block.push(new MovingBlockType1Controller(280,350,2,
+  // {
+  //   minX  : 80,
+  //   maxX  : 480,
+  //   tweenTime : 3,
+  //   timeDelay : 1
+  // }));
+  // Nakama.block.push(new MovingBlockType1Controller(280,400,1,
+  // {
+  //   minX  : 80,
+  //   maxX  : 480,
+  //   tweenTime : 3,
+  //   timeDelay : 1
+  // }));
+  //
+  // Nakama.block.push(new MovingBlockType2Controller(280, 400, {
+  //   tweenTime : 3,
+  //   minY      : 200,
+  //   maxY      : 600
+  // }))
 
   Nakama.chicken.push(new ChickenController(300,800));
 }
@@ -120,19 +107,14 @@ var update = function(){
       }
     }
   }
-  console.log(Nakama.chicken[0].sprite.health);
+  // console.log(Nakama.chicken[0].sprite.health);
   //bring the chicken sprite on top of others.
   Nakama.game.world.bringToTop(Nakama.chickenGroup);
 
-  Nakama.backgroundLeft.tilePosition.y += 1;
-  Nakama.backgroundRight.tilePosition.y += 1;
+  Nakama.background.tilePosition.y += 1;
 
-  if (Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].position.y >= Nakama.leftLinesGroup.children[Nakama.leftLinesGroup.children.length - 1].height/2 - 10) {
-    randomLines(Nakama.leftLinesGroup);
-  }
-
-  if (Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].position.y >= Nakama.rightLinesGroup.children[Nakama.rightLinesGroup.children.length - 1].height/2 - 10) {
-    randomLines(Nakama.rightLinesGroup);
+  if (Nakama.linesGroup.children[Nakama.linesGroup.children.length - 1].position.y >= Nakama.linesGroup.children[Nakama.linesGroup.children.length - 1].height/2 - 10) {
+    randomLines();
   }
 
   Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
@@ -155,7 +137,7 @@ var update = function(){
   if(Nakama.timeToSpawnAnEnemy >= Nakama.configs.timeToSpawnAnEnemy) {
     if(Math.round(Math.random())>=0.5){
       //random position.y and directionType for this enemy.
-      Nakama.enemies.push(new EnemyType1Controller(620, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
+      Nakama.enemies.push(new EnemyType1Controller(Nakama.game.world.width - 20, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
       Nakama.timeToSpawnAnEnemy = 0;
     }
     else{
@@ -194,39 +176,32 @@ var onBulletHitChicken = function(bulletSprite, chickenSprite){
   chickenSprite.damage(1);
 }
 
-var randomLines = function(linesGroup){
-  var x = 0;
-    if (linesGroup === Nakama.leftLinesGroup) {
-    x = Nakama.game.world.width/4;
-  } else {
-    x = 3*Nakama.game.world.width/4;
-  }
-
+var randomLines = function(){
   var lineID = Math.floor(Math.random() * 8);
   switch (lineID) {
     case 0:
-      new Lines_roundHole(x, linesGroup);
+      new Lines_roundHole();
       break;
     case 1:
-      new Lines_longStraight(x, linesGroup);
+      new Lines_longStraight();
       break;
     case 2:
-      new Lines_squareHole(x, linesGroup);
+      new Lines_squareHole();
       break;
     case 3:
-      new Lines_hexaHole(x, linesGroup);
+      new Lines_hexaHole();
       break;
     case 4:
-      new Lines_octaHole(x, linesGroup);
+      new Lines_octaHole();
       break;
     case 5:
-      new Lines_pointLeft(x, linesGroup);
+      new Lines_pointLeft();
       break;
     case 6:
-      new Lines_pointRight(x, linesGroup);
+      new Lines_pointRight();
       break;
     case 7:
-      new Lines_eightHole(x, linesGroup);
+      new Lines_eightHole();
       break;
   }
 }

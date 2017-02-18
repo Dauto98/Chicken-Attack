@@ -1,4 +1,3 @@
-"use strict";
 class ChickenController {
   constructor(x,y,configs){
     this.sprite = Nakama.chickenGroup.create(
@@ -15,30 +14,7 @@ class ChickenController {
 }
 
 update(){
-  //moving features and changing frame while moving.
-    /*if(Nakama.keyboard.isDown(Nakama.configs.keyboard.up)){
-      this.sprite.body.velocity.y = -Nakama.configs.chickenSpeed;
-      this.sprite.animations.play('walk',this.chickenFramePerSecond,true);
-    }
-    else if(Nakama.keyboard.isDown(Nakama.configs.keyboard.down)){
-      this.sprite.body.velocity.y = Nakama.configs.chickenSpeed;
-      this.sprite.animations.play('walk',this.chickenFramePerSecond,true);
-    }
-    else this.sprite.body.velocity.y = 0;
-
-    if(Nakama.keyboard.isDown(Nakama.configs.keyboard.left)){
-      this.sprite.body.velocity.x = -Nakama.configs.chickenSpeed;
-      this.sprite.animations.play('walk',this.chickenFramePerSecond,true);
-    }
-    else if(Nakama.keyboard.isDown(Nakama.configs.keyboard.right)){
-      this.sprite.body.velocity.x = Nakama.configs.chickenSpeed;
-      this.sprite.animations.play('walk',this.chickenFramePerSecond,true);
-    }
-    else this.sprite.body.velocity.x = 0;*/
     this.sprite.position = Nakama.game.input.activePointer;
     this.sprite.animations.play('walk',this.chickenFramePerSecond, true);
-
-    //if(this.sprite.damage)
-    // console.log(this.sprite.health);
   }
 }
