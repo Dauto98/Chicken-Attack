@@ -17,7 +17,7 @@ Nakama.configs = {
 };
 
 window.onload = function(){
-  Nakama.game = new Phaser.Game(640,960,Phaser.AUTO,'',
+  Nakama.game = new Phaser.Game(960,960,Phaser.AUTO,'',
     {
       preload: preload,
       create: create,
@@ -31,7 +31,7 @@ window.onload = function(){
 var preload = function(){
   Nakama.game.scale.minWidth = 320;
   Nakama.game.scale.minHeight = 480;
-  Nakama.game.scale.maxWidth = 640;
+  Nakama.game.scale.maxWidth = 960;
   Nakama.game.scale.maxHeight = 960;
   Nakama.game.scale.pageAlignHorizontally = true;
   Nakama.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -50,8 +50,8 @@ var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
   Nakama.keyboard = Nakama.game.input.keyboard;
 
-  Nakama.backgroundLeft = Nakama.game.add.tileSprite(0, 0, 320, 960, "sheet1", "Map.png");
-  Nakama.backgroundRight = Nakama.game.add.tileSprite(320, 0, 320, 960, "sheet1", "Map3.png");
+  Nakama.backgroundLeft = Nakama.game.add.tileSprite(0, 0, Nakama.game.world.width/2, Nakama.game.world.height, "sheet1", "Map.png");
+  Nakama.backgroundRight = Nakama.game.add.tileSprite(Nakama.game.world.width/2, 0, Nakama.game.world.width/2, Nakama.game.world.height, "sheet1", "Map3.png");
 
   Nakama.graph = Nakama.game.add.graphics(Nakama.game.width/2, 0);
   Nakama.graph.lineStyle(5, 0xECEFF1);
@@ -73,8 +73,8 @@ var create = function(){
 
   Nakama.timeToSpawnAnEnemy = 0;
 
-  new Lines_longStraight(160, Nakama.leftLinesGroup);
-  new Lines_longStraight(480, Nakama.rightLinesGroup);
+  new Lines_longStraight(Nakama.game.world.width/4, Nakama.leftLinesGroup);
+  new Lines_longStraight(3*Nakama.game.world.width/4, Nakama.rightLinesGroup);
 
   // Nakama.block.push(new SpinningBlockType1Controller(300,300));
   // Nakama.block.push(new SpinningBlockType2Controller(300,600));
@@ -181,9 +181,9 @@ var onBulletHitChicken = function(bulletSprite, chickenSprite){
 var randomLines = function(linesGroup){
   var x = 0;
     if (linesGroup === Nakama.leftLinesGroup) {
-    x = 160;
+    x = Nakama.game.world.width/4;
   } else {
-    x = 480;
+    x = 3*Nakama.game.world.width/4;
   }
 
   var lineID = Math.floor(Math.random() * 8);
