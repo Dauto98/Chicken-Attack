@@ -1,4 +1,4 @@
-class MovingBlockController{
+class MovingBlockType1Controller{
   constructor(x,y,directionType,configs){
     this.sprite = Nakama.blockGroup.create(
       x,
