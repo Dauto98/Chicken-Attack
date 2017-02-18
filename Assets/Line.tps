@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.3.3</string>
         <key>fileName</key>
-        <string>E:/Software Engineer/JS/WEB5.0/Chicken-Attack/Assets/Spritesheet.tps</string>
+        <string>E:/Software Engineer/JS/WEB5.0/Chicken-Attack/Assets/Line.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -34,9 +34,9 @@
         <key>dpi</key>
         <uint>72</uint>
         <key>dataFormat</key>
-        <string>spritesheet-only</string>
+        <string>json</string>
         <key>textureFileName</key>
-        <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Spritesheet-{n1}.png</filename>
+        <filename>Line.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>pvrCompressionQuality</key>
@@ -90,7 +90,7 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>4096</int>
+            <int>8192</int>
             <key>height</key>
             <int>4096</int>
         </QSize>
@@ -146,9 +146,15 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileNames</key>
-        <map type="GFileNameMap"/>
+        <map type="GFileNameMap">
+            <key>data</key>
+            <struct type="DataFile">
+                <key>name</key>
+                <filename>Line.json</filename>
+            </struct>
+        </map>
         <key>multiPack</key>
-        <true/>
+        <false/>
         <key>forceIdenticalLayout</key>
         <false/>
         <key>outputFormat</key>
@@ -173,7 +179,7 @@
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
             <key>extrude</key>
-            <uint>0</uint>
+            <uint>1</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMargin</key>
@@ -258,23 +264,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Map.png</key>
-            <key type="filename">C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Map3.png</key>
-            <key type="filename">C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Map4.png</key>
-            <key type="filename">C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Mapdemo.png</key>
-            <key type="filename">C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/map1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>334,1001,669,2002</rect>
-                <key>scale9Paddings</key>
-                <rect>334,1001,669,2002</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/line7.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -299,11 +288,6 @@
             <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Line5.png</filename>
             <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Line6.png</filename>
             <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/line7.png</filename>
-            <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Map.png</filename>
-            <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/map1.png</filename>
-            <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Map3.png</filename>
-            <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Map4.png</filename>
-            <filename>C:/Users/KingDra/Desktop/Follow The Line - CHICKEN ATTACK/Mapdemo.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
