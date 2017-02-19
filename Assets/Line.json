@@ -2,7 +2,7 @@
 
 "line.png":
 {
-	"frame": {"x":2808,"y":2003,"w":665,"h":2000},
+	"frame": {"x":1467,"y":1,"w":665,"h":2000},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":665,"h":2000},
@@ -11,7 +11,7 @@
 },
 "Line1.png":
 {
-	"frame": {"x":2679,"y":2003,"w":127,"h":2002},
+	"frame": {"x":1,"y":1,"w":127,"h":2002},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":127,"h":2002},
@@ -20,7 +20,7 @@
 },
 "Line2.png":
 {
-	"frame": {"x":2679,"y":1,"w":668,"h":2000},
+	"frame": {"x":130,"y":1,"w":668,"h":2000},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":668,"h":2000},
@@ -29,47 +29,56 @@
 },
 "Line3.png":
 {
-	"frame": {"x":3349,"y":1,"w":665,"h":2000},
+	"frame": {"x":800,"y":1,"w":665,"h":2000},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":665,"h":2000},
 	"sourceSize": {"w":665,"h":2000},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"Line4.png":
+{
+	"frame": {"x":2134,"y":1,"w":664,"h":2000},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":664,"h":2000},
+	"sourceSize": {"w":664,"h":2000},
+	"pivot": {"x":0.5,"y":0.5}
+},
 "Line5.png":
 {
-	"frame": {"x":3475,"y":2003,"w":396,"h":2000},
+	"frame": {"x":3459,"y":1,"w":396,"h":2000},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":396,"h":2000},
 	"sourceSize": {"w":396,"h":2000},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"map1.png":
+"Line6.png":
 {
-	"frame": {"x":1340,"y":1,"w":1337,"h":4004},
+	"frame": {"x":3857,"y":1,"w":396,"h":2000},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1337,"h":4004},
-	"sourceSize": {"w":1337,"h":4004},
+	"spriteSourceSize": {"x":0,"y":0,"w":396,"h":2000},
+	"sourceSize": {"w":396,"h":2000},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"Mapdemo.png":
+"line7.png":
 {
-	"frame": {"x":1,"y":1,"w":1337,"h":4004},
+	"frame": {"x":2800,"y":1,"w":657,"h":2000},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1337,"h":4004},
-	"sourceSize": {"w":1337,"h":4004},
+	"spriteSourceSize": {"x":0,"y":0,"w":657,"h":2000},
+	"sourceSize": {"w":657,"h":2000},
 	"pivot": {"x":0.5,"y":0.5}
 }},
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "Spritesheet-2.png",
+	"image": "Line.png",
 	"format": "RGBA8888",
-	"size": {"w":4015,"h":4006},
+	"size": {"w":4254,"h":2004},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:acb5de888961761ff7199dd6c37bcb4f:35a9fab3080897e26eaae3638187bdd1:12ecb94c50eafa79733e32db5e640e81$"
+	"smartupdate": "$TexturePacker:SmartUpdate:ffa47e37f67e099692b3799016fdf0f2:adc550b2eb6ea8660007594b830ee166:5171d4980b679e3b75c03c8f830fc695$"
 }
 }
