@@ -7,7 +7,7 @@ Nakama.configs = {
   enemyBulletCooldown : 0.4,
   timeToSpawnAnEnemy  : 5,
   obstaclesCooldown   : 5,
-  linesSpeed          : 300
+  linesSpeed : 400
 
 };
 
@@ -46,7 +46,7 @@ var preload = function(){
   Nakama.game.load.image('Scoreboard5', 'Assets/healthdemo1.png');
   Nakama.game.load.image('Scoreboard0', 'Assets/healthdemo6.png');
   Nakama.game.load.image('gameOver', 'Assets/GOV.png');
-  Nakama.game.load.image('restart','Assets/Restart.png');
+  Nakama.game.load.image('restart','Assets/Restart-1.png');
 
 }
 
@@ -57,8 +57,8 @@ var create = function(){
   Nakama.game.input.activePointer.x = Nakama.game.world.width/2;
   Nakama.game.input.activePointer.y = Nakama.game.world.height/2;
 
-  // background
-  Nakama.background = Nakama.game.add.tileSprite(0, 0, Nakama.game.world.width, Nakama.game.world.height, "sheet1", "Map3.png");
+  Nakama.background = Nakama.game.add.tileSprite(0, 0,
+      Nakama.game.world.width, Nakama.game.world.height, "sheet1", "Map3.png");
 
   Nakama.linesGroup      = Nakama.game.add.physicsGroup();
   Nakama.chickenGroup    = Nakama.game.add.physicsGroup();
@@ -89,121 +89,125 @@ var create = function(){
 
   Nakama.score = 0;
   Nakama.highScore;
-  Nakama.scoreBoard;
+  Nakama.scoreBoard = Nakama.game.add.image(0,800,'Scoreboard5');
+  Nakama.scoreDisplay = Nakama.game.add.text(140, 862, 0, {
+    fontSize : '30px'
+  });
+
+  new Lines_longStraight(Nakama.game.world.width/2, Nakama.leftlinesGroup);
+  Nakama.chicken.push(new ChickenController(300,500));
 }
 
 // update game state each frame
 var update = function(){
+  //bring the chicken sprite on top of others.
+  Nakama.game.world.bringToTop(Nakama.chickenGroup);
+
   if(Nakama.chicken[0].sprite.alive){
+    Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
     Nakama.score += Nakama.game.time.physicsElapsed;
+    //randomly create an enemy between type 1 and type 2 after each ... seconds.
+    if(Nakama.timeToSpawnAnEnemy >= Nakama.configs.timeToSpawnAnEnemy) {
+      if(Math.round(Math.random())>=0.5){
+        //random position.y and directionType for this enemy.
+        Nakama.enemies.push(new EnemyType1Controller(
+          Nakama.game.world.width - 20,
+          Math.round(Math.random()*600 + 100),
+          Math.round(Math.random()+1)));
+        Nakama.timeToSpawnAnEnemy = 0;
+      }
+      else{
+        //random position.x and directionType for this enemy.
+        Nakama.enemies.push(new EnemyType2Controller(
+          20,
+          Math.round(Math.random()*600 + 100),
+          Math.round(Math.random()+1)));
+        Nakama.timeToSpawnAnEnemy = 0;
+      }
+    }
   }
-  else Nakama.score += 0;
-  if(Nakama.chicken.length != 0){
-    switch(Nakama.chicken[0].sprite.health){
+
+  else {
+    Nakama.score += 0;
+    if(Nakama.score > Nakama.highScore) Nakama.highScore = Nakama.score;
+    var gameOver = Nakama.game.add.image(480 , 380, 'gameOver');
+    gameOver.anchor.set(0.5);
+    var restart = Nakama.game.add.image(480, 580, 'restart')
+    restart.anchor.set(0.5);
+    if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+      Nakama.game.state.restart();
+  }
+
+  switch(Nakama.chicken[0].sprite.health){
       case 1 : {
-        scoreBoard = Nakama.game.add.image(0, 800, 'Scoreboard1');
+        Nakama.scoreBoard.loadTexture('Scoreboard1',0);
         break;
       }
       case 2 : {
-        scoreBoard = Nakama.game.add.image(0, 800, 'Scoreboard2');
+        Nakama.scoreBoard.loadTexture('Scoreboard2',0);
         break;
       }
       case 3 : {
-        scoreBoard = Nakama.game.add.image(0, 800, 'Scoreboard3');
+        Nakama.scoreBoard.loadTexture('Scoreboard3',0);
         break;
       }
       case 4 : {
-        scoreBoard = Nakama.game.add.image(0, 800, 'Scoreboard4');
+        Nakama.scoreBoard.loadTexture('Scoreboard4',0);
         break;
       }
       case 5 : {
-        scoreBoard = Nakama.game.add.image(0, 800, 'Scoreboard5');
+        Nakama.scoreBoard.loadTexture('Scoreboard5',0);
         break;
       }
-      default : scoreBoard = Nakama.game.add.image(0, 800, 'Scoreboard0');
-    }
+      default : {
+        Nakama.scoreBoard.loadTexture('Scoreboard0',0);
+      }
   }
-  scoreBoard.scale.setTo(0.3,0.3);
-  console.log(Nakama.chicken[0].sprite.health);
-  Nakama.game.add.text(140 , 862, Math.round(Nakama.score), {
-    fontSize : '30px',
-    fontWeight : 'bold'});
-
+  Nakama.scoreBoard.scale.setTo(0.3,0.3);
+  Nakama.scoreDisplay.setText(Math.round(Nakama.score));
   //Cheat code 500,000 health
   if(Nakama.keyboard.isDown(Phaser.Keyboard.Q)) {
     if(Nakama.keyboard.isDown(Phaser.Keyboard.W)){
       if(Nakama.keyboard.isDown(Phaser.Keyboard.E)){
         if(Nakama.keyboard.isDown(Phaser.Keyboard.R)){
           Nakama.chicken[0].sprite.health = 500000;
-        }
-      }
-    }
-  }
-  //bring the chicken sprite on top of others.
-  Nakama.game.world.bringToTop(Nakama.chickenGroup);
+    }}}}
 
   //run background
   Nakama.background.tilePosition.y += 1;
-
-  //randomLines
-  if (Nakama.linesGroup.children[Nakama.linesGroup.children.length - 1].position.y >= Nakama.linesGroup.children[Nakama.linesGroup.children.length - 1].height/2 - 20) {
+  var a = Nakama.linesGroup.children.length;
+  if (Nakama.linesGroup.children[a - 1].position.y >=
+          Nakama.linesGroup.children[a - 1].height/2 - 10) {
     randomLines();
   }
 
-  for(var i = 0; i < Nakama.chicken.length; i++){
-    Nakama.chicken[i].update();
-  }
+  Nakama.chicken[0].update();
 
-  for(var i = 0; i < Nakama.block.length; i++){
+  var b = Nakama.block.length;
+  for(var i = 0; i < b; i++){
     Nakama.block[i].update();
   }
 
-  for(var i = 0; i < Nakama.enemies.length; i++){
+  var c = Nakama.enemies.length;
+  for(var i = 0; i < c; i++){
     Nakama.enemies[i].update();
   }
-  for(var i = 0; i < Nakama.enemyLaser.length; i++){
+
+  var d = Nakama.enemyLaser.length;
+  for(var i = 0; i < d; i++){
     Nakama.enemyLaser[i].update();
   }
-
-  //randomly create an enemy between type 1 and type 2 after each ... seconds.
-  Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
-  if(Nakama.timeToSpawnAnEnemy >= Nakama.configs.timeToSpawnAnEnemy) {
-    if(Math.round(Math.random())>=0.5){
-      //random position.y and directionType for this enemy.
-      Nakama.enemies.push(new EnemyType1Controller(Nakama.game.world.width - 20, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
-      Nakama.timeToSpawnAnEnemy = 0;
-    }
-    else{
-      //random position.x and directionType for this enemy.
-      Nakama.enemies.push(new EnemyType2Controller(20, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
-      Nakama.timeToSpawnAnEnemy = 0;
-    }
-  }
-
   //check overlap for every sprite in 2 array Chicken and EnemyLaser
-  if(Nakama.chicken.alive && Nakama.enemyLaser.length != undefined){
-    for(var i = 0; i < Nakama.chicken.length; i++){
-      for(var j = 0; j < Nakama.enemyLaser.length; j++){
-          if(checkOverlap(Nakama.enemyLaser[j].sprite,Nakama.chicken[i].sprite))
-            Nakama.chicken[i].damage();
+  if(Nakama.chicken.alive && d != undefined){
+      for(var j = 0; j < d; j++){
+          if(checkOverlap(Nakama.enemyLaser[j].sprite,Nakama.chicken[0].sprite))
+            Nakama.chicken[0].damage();
         }
     }
-  }
 
   Nakama.game.physics.arcade.overlap(Nakama.bulletGroup,
     Nakama.chickenGroup,
     onBulletHitChicken);
-
-    if(!Nakama.chicken[0].sprite.alive) {
-      if(Nakama.score > Nakama.highScore) Nakama.highScore = Nakama.score;
-      var gameOver = Nakama.game.add.image(480 , 380, 'gameOver');
-      Nakama.game.world.bringToTop(gameOver);
-      gameOver.anchor.set(0.5);
-      var restart = Nakama.game.add.image(480, 580, 'restart')
-      restart.anchor.set(0.5);
-      if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-        Nakama.game.state.restart();
-    }
 }
 
 // before camera render (mostly for debug)
