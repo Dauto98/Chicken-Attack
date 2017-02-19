@@ -7,6 +7,7 @@ class SpinningBlockType1Controller {
       "sheet2",
       "Block.png"
     );
+    this.sprite.scale.setTo(1.5,1.5);
     this.sprite.anchor = new Phaser.Point(0.5 , 0.5);
     this.sprite.angle = 0;
     this.timeSinceLastSpin = 0;

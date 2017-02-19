@@ -7,7 +7,7 @@ Nakama.configs = {
   enemyBulletCooldown : 0.4,
   timeToSpawnAnEnemy  : 5,
   obstaclesCooldown   : 5,
-  linesSpeed : 400
+  linesSpeed : 300
 
 };
 
@@ -86,7 +86,6 @@ var create = function(){
 
   // add chicken
   Nakama.chicken.push(new ChickenController(Nakama.game.world.width/2, 800));
-
   Nakama.score = 0;
   Nakama.highScore;
   Nakama.scoreBoard = Nakama.game.add.image(0,800,'Scoreboard5');
@@ -254,18 +253,17 @@ var randomLines = function(){
       new Lines_eightHole();
       break;
     case 8:
-      Nakama.block.push(new GrowingBlockControllerType1(-160, {timeExists: 6}));
-      break;
+  //    Nakama.block.push(new GrowingBlockControllerType1(-160, {timeExists: 6}));
+  //    break;
     case 9:
-      // Nakama.block.push(new MovingBlockType1Controller(-54, 1, {tweenTime: 3, timeDelay: 2, minX : 200, maxX: 700}));
-      // break;
+       Nakama.block.push(new MovingBlockType1Controller(-54,
+         Math.round(Math.random()+1),
+         {tweenTime: 1, minX : 280, maxX: 680, timeDelay : 0.5}));
+       break;
     case 10:
-      // Nakama.block.push(new MovingBlockType2Controller(-161, {tweenTime: 3, minY: 200, maxY: 600}));
-      // break;
-    case 11:
       Nakama.block.push(new SpinningBlockType2Controller(-161))
       break;
-    case 12:
+    case 11:
       Nakama.block.push(new SpinningBlockType1Controller(-161))
       break;
   }

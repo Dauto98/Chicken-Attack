@@ -19,10 +19,10 @@ class GrowingBlockControllerType1 {
     this.timeExists += Nakama.game.time.physicsElapsed;
     if(this.timeExists <= this.configs.timeExists){
       if(this.timeToScale < 4)
-        this.sprite.scale.setTo(this.timeToScale/2 , this.timeToScale/2);
+        this.sprite.scale.setTo(this.timeToScale/3 , this.timeToScale/3);
       if(this.timeToScale >= 4) {
         this.timeToScale2 -= Nakama.game.time.physicsElapsed;
-        this.sprite.scale.setTo(this.timeToScale2/2 , this.timeToScale2/2);
+        this.sprite.scale.setTo(this.timeToScale2/3 , this.timeToScale2/3);
       }
     }
     else this.sprite.destroy();
