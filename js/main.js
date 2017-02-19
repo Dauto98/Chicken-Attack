@@ -47,7 +47,7 @@ var preload = function(){
   Nakama.game.load.image('Scoreboard0', 'Assets/healthdemo6.png');
   Nakama.game.load.image('gameOver', 'Assets/GOV.png');
   Nakama.game.load.image('restart','Assets/Restart-1.png');
-
+  Nakama.game.load.audio('chickenAttack', 'Assets/chicken-attack.mp3');
 }
 
 // initialize the game
@@ -56,6 +56,9 @@ var create = function(){
   Nakama.keyboard = Nakama.game.input.keyboard;
   Nakama.game.input.activePointer.x = Nakama.game.world.width/2;
   Nakama.game.input.activePointer.y = Nakama.game.world.height/2;
+  Nakama.backgroundMusic = Nakama.game.add.audio('chickenAttack');
+  Nakama.backgroundMusic.loop = true;
+  Nakama.backgroundMusic.play();
 
   Nakama.background = Nakama.game.add.tileSprite(0, 0,
       Nakama.game.world.width, Nakama.game.world.height, "sheet1", "Map3.png");
@@ -132,8 +135,10 @@ var update = function(){
     gameOver.anchor.set(0.5);
     var restart = Nakama.game.add.image(480, 580, 'restart')
     restart.anchor.set(0.5);
-    if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+    if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+      Nakama.backgroundMusic.destroy();
       Nakama.game.state.restart();
+    }
   }
 
   switch(Nakama.chicken[0].sprite.health){
@@ -258,7 +263,7 @@ var randomLines = function(){
     case 9:
        Nakama.block.push(new MovingBlockType1Controller(-54,
          Math.round(Math.random()+1),
-         {tweenTime: 1, minX : 280, maxX: 680, timeDelay : 0.5}));
+         {tweenTime: 1, minX : 280, maxX: 680, timeDelay : 1}));
        break;
     case 10:
       Nakama.block.push(new SpinningBlockType2Controller(-161))
