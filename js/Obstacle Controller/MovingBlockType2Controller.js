@@ -7,6 +7,8 @@ class MovingBlockType2Controller {
       "EnemyType4.png"
     )
     this.configs = configs;
+    this.sprite.checkWorldBounds = true;
+    this.sprite.outOfBoundsKill = true;
     this.sprite.anchor = new Phaser.Point(0.5 , 0.5);
     this.configs.centerY = (this.configs.minY + this.configs.maxY)/2;
     this.configs.movementDistance = this.configs.maxY - this.configs.minY;
@@ -20,5 +22,6 @@ class MovingBlockType2Controller {
     this.configs.movementDistance *
     Math.sin(this.timeSinceLastSpawn/this.configs.tweenTime * Math.PI * 2);
     console.log(this.sprite.position.y);
+    if(!this.sprite.alive) this.sprite.destroy();
   }
 }
