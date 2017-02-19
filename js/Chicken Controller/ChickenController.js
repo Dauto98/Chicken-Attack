@@ -14,12 +14,12 @@ class ChickenController {
     this.shouldCheckBackgroundColor = 0;
     this.inPath = true;
     this.ctx = Nakama.game.canvas.getContext('2d');
-
+    this.timeSinceStart = 0;
 }
 
 update(){
+    this.timeSinceStart += Nakama.game.time.physicsElapsed;
     this.sprite.position = Nakama.game.input.activePointer;
-
     this.shouldCheckBackgroundColor++;
     if(this.shouldCheckBackgroundColor == 1){
       if(this.ctx){
@@ -37,21 +37,21 @@ update(){
 
       this.sprite.alpha = 0;
     }
-    console.log(this.inPath);
 
     this.sprite.animations.play('walk',this.chickenFramePerSecond, true);
-    if(this.sprite.health == 0){
-      this.sprite.kill();
+
+    if(this.sprite.health == 0)
+    {
+      this.sprite.destroy();
+      //Nakama.chicken.splice(0,1);
     }
-    if(this.invulnerableState == false){
-      this.sprite.tint = 0xffffff;
-    } else if(this.invulnerableState == true){
-      this.sprite.tint = 0xff0000;
-    }
-    if (this.inPath === false) {
-      this.damage();
+    if(this.invulnerableState == false) this.sprite.tint = 0xffffff;
+    else if(this.invulnerableState == true) this.sprite.tint = 0xff0000;
+    if(this.timeSinceStart >= 2){
+      if(this.inPath == false) this.damage();
     }
   }
+
 
   damage(){
     if(this.invulnerableState == false){

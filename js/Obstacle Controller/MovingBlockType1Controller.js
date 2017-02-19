@@ -8,10 +8,11 @@ class MovingBlockType1Controller{
     );
     //this property decides if the sprite moves left or right first when started
     //moving
+    this.sprite.checkWorldBounds = true;
+    this.sprite.outOfBoundsKill = true;
     this.directionType = directionType;
     this.directionIndex = (this.directionType == 1)?(1):(-1);
     this.configs = configs;
-    this.sprite.body.collideWorldBounds = true;
     this.timeSinceLastSpawn = 0;
     this.timeMoving = 0;
     this.timeDelay = 0;
@@ -23,6 +24,7 @@ class MovingBlockType1Controller{
   update(){
     //this.timeMoving property used to calculate if the sprite has moved half of
     //the way or not.
+    if(!this.sprite.alive) this.sprite.destroy();
     this.timeMoving += Nakama.game.time.physicsElapsed;
     //Check if this.timeMoving = T/4 (tweenTime/2) : harmonic motion.
     if(this.timeMoving >= this.configs.tweenTime/2) {
