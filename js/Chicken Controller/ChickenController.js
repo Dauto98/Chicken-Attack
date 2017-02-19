@@ -3,7 +3,7 @@ class ChickenController {
     this.sprite = Nakama.chickenGroup.create(x, y, "chicken");
     this.configs = configs;
 
-    this.sprite.scale.setTo(0.2, 0.2);
+    this.sprite.scale.setTo(0.35, 0.35);
     this.sprite.anchor = new Phaser.Point(0.5 , 0.5);
     this.sprite.body.collideWorldBounds = true;
     this.sprite.health = Nakama.configs.chickenHealth;

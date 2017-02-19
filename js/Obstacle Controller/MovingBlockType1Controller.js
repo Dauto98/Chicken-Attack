@@ -8,6 +8,7 @@ class MovingBlockType1Controller{
     );
     //this property decides if the sprite moves left or right first when started
     //moving
+    this.sprite.anchor.set(0.5);
     this.sprite.checkWorldBounds = true;
     this.sprite.outOfBoundsKill = true;
     this.directionType = directionType;
@@ -19,6 +20,7 @@ class MovingBlockType1Controller{
     this.configs.centerX = (this.configs.minX + this.configs.maxX)/2;
     this.configs.movementDistance = (this.configs.maxX - this.configs.minX)/2;
     this.sprite.body.velocity.y = Nakama.configs.linesSpeed;
+    this.sprite.scale.setTo(1.52,1.52);
   }
 
   update(){
@@ -40,8 +42,9 @@ class MovingBlockType1Controller{
     else{
       //Harmonic motion algorithm in Phaser
       this.timeSinceLastSpawn += Nakama.game.time.physicsElapsed;
-      this.sprite.position.x = this.configs.centerX + this.configs.movementDistance * Math.sin(this.timeSinceLastSpawn/this.configs.tweenTime * Math.PI * 2) * this.directionIndex;
-    console.log(this.timeMoving);
+      this.sprite.position.x = this.configs.centerX + this.configs.movementDistance *
+      Math.sin(this.timeSinceLastSpawn/this.configs.tweenTime * Math.PI * 2) *
+      this.directionIndex;
     }
   }
 }
