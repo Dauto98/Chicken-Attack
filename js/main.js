@@ -39,15 +39,21 @@ var preload = function(){
   Nakama.game.load.atlasJSONHash('sheet2', 'Assets/Block.png', 'Assets/Block.json');
   Nakama.game.load.atlasJSONHash('sheet3', 'Assets/Line.png', 'Assets/Line.json');
   Nakama.game.load.spritesheet('chicken', 'Assets/chicken3.png', 117, 155);
-  Nakama.game.load.image('Scoreboard1', 'Assets/healthdemo5.png');
-  Nakama.game.load.image('Scoreboard2', 'Assets/healthdemo4.png');
-  Nakama.game.load.image('Scoreboard3', 'Assets/healthdemo3.png');
-  Nakama.game.load.image('Scoreboard4', 'Assets/healthdemo2.png');
-  Nakama.game.load.image('Scoreboard5', 'Assets/healthdemo1.png');
-  Nakama.game.load.image('Scoreboard0', 'Assets/healthdemo6.png');
-  Nakama.game.load.image('gameOver', 'Assets/GOV.png');
+  Nakama.game.load.image('Block2', 'Assets/Block2.png');
+  Nakama.game.load.image('healthBar1', 'Assets/healthdemo1.png');
+  Nakama.game.load.image('healthBar2', 'Assets/healthdemo2.png');
+  Nakama.game.load.image('healthBar3', 'Assets/healthdemo3.png');
+  Nakama.game.load.image('healthBar4', 'Assets/healthdemo4.png');
+  Nakama.game.load.image('healthBar5', 'Assets/healthdemo5.png');
+  Nakama.game.load.image('healthBar0', 'Assets/healthdemo0.png');
+  Nakama.game.load.image('score', 'Assets/score.png');
+  Nakama.game.load.image('gameOver1', 'Assets/gameOver1.png');
+  Nakama.game.load.image('gameOver2', 'Assets/gameOver2.png');
+  Nakama.game.load.image('gameOver3', 'Assets/gameOver3.png');
+  Nakama.game.load.image('gameOver4', 'Assets/gameOver4.png');
   Nakama.game.load.image('restart','Assets/Restart-1.png');
   Nakama.game.load.audio('chickenAttack', 'Assets/chicken-attack.mp3');
+  Nakama.game.load.audio('chickenSound', 'Assets/chicken-sound.mp3');
 }
 
 // initialize the game
@@ -57,8 +63,10 @@ var create = function(){
   Nakama.game.input.activePointer.x = Nakama.game.world.width/2;
   Nakama.game.input.activePointer.y = Nakama.game.world.height/2;
   Nakama.backgroundMusic = Nakama.game.add.audio('chickenAttack');
+  Nakama.backgroundMusic.volume = 0.4;
   Nakama.backgroundMusic.loop = true;
   Nakama.backgroundMusic.play();
+  Nakama.chickenSound = Nakama.game.add.audio('chickenSound');
 
   Nakama.background = Nakama.game.add.tileSprite(0, 0,
       Nakama.game.world.width, Nakama.game.world.height, "sheet1", "Map3.png");
@@ -75,7 +83,6 @@ var create = function(){
   Nakama.block        = [];
   Nakama.enemyLaser   = [];
   Nakama.enemyBullet  = [];
-
   Nakama.timeToSpawnAnEnemy = 0;
   Nakama.timeToSpawnAnObstacle = 0;
 
@@ -91,10 +98,14 @@ var create = function(){
   Nakama.chicken.push(new ChickenController(Nakama.game.world.width/2, 800));
   Nakama.score = 0;
   Nakama.highScore;
-  Nakama.scoreBoard = Nakama.game.add.image(0,800,'Scoreboard5');
-  Nakama.scoreDisplay = Nakama.game.add.text(140, 862, 0, {
-    fontSize : '30px'
+  Nakama.healthBar = Nakama.game.add.image(0,0,'healthBar5');
+  Nakama.scoreBar = Nakama.game.add.image(780,-10,'score');
+  Nakama.scoreDisplay = Nakama.game.add.text(860, 70, 0, {
+    fontSize : '30px',
+    fontFamily  : 'Helvetica'
   });
+  Nakama.gameOver = Nakama.game.add.image(480 , 380, 'gameOver1');
+  Nakama.gameOver.visible = false;
 
   new Lines_longStraight(Nakama.game.world.width/2, Nakama.leftlinesGroup);
 }
@@ -131,8 +142,18 @@ var update = function(){
   else {
     Nakama.score += 0;
     if(Nakama.score > Nakama.highScore) Nakama.highScore = Nakama.score;
-    var gameOver = Nakama.game.add.image(480 , 380, 'gameOver');
-    gameOver.anchor.set(0.5);
+    Nakama.gameOver.visible = true;
+    switch(Math.floor(Nakama.score)%4){
+      case 0:  Nakama.gameOver.loadTexture('gameOver1',0);
+               break;
+      case 1:  Nakama.gameOver.loadTexture('gameOver2',0);
+               break;
+      case 2:  Nakama.gameOver.loadTexture('gameOver3',0);
+               break;
+      case 3:  Nakama.gameOver.loadTexture('gameOver4',0);
+               break;
+   }
+    Nakama.gameOver.anchor.set(0.5);
     var restart = Nakama.game.add.image(480, 580, 'restart')
     restart.anchor.set(0.5);
     if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
@@ -143,30 +164,31 @@ var update = function(){
 
   switch(Nakama.chicken[0].sprite.health){
       case 1 : {
-        Nakama.scoreBoard.loadTexture('Scoreboard1',0);
+        Nakama.healthBar.loadTexture('healthBar1',0);
         break;
       }
       case 2 : {
-        Nakama.scoreBoard.loadTexture('Scoreboard2',0);
+        Nakama.healthBar.loadTexture('healthBar2',0);
         break;
       }
       case 3 : {
-        Nakama.scoreBoard.loadTexture('Scoreboard3',0);
+        Nakama.healthBar.loadTexture('healthBar3',0);
         break;
       }
       case 4 : {
-        Nakama.scoreBoard.loadTexture('Scoreboard4',0);
+        Nakama.healthBar.loadTexture('healthBar4',0);
         break;
       }
       case 5 : {
-        Nakama.scoreBoard.loadTexture('Scoreboard5',0);
+        Nakama.healthBar.loadTexture('healthBar5',0);
         break;
       }
       default : {
-        Nakama.scoreBoard.loadTexture('Scoreboard0',0);
+        Nakama.healthBar.loadTexture('healthBar0',0);
       }
   }
-  Nakama.scoreBoard.scale.setTo(0.3,0.3);
+  Nakama.healthBar.scale.setTo(0.22,0.22);
+  Nakama.scoreBar.scale.setTo(0.22,0.22);
   Nakama.scoreDisplay.setText(Math.round(Nakama.score));
   //Cheat code 500,000 health
   if(Nakama.keyboard.isDown(Phaser.Keyboard.Q)) {
@@ -258,18 +280,18 @@ var randomLines = function(){
       new Lines_eightHole();
       break;
     case 8:
-  //    Nakama.block.push(new GrowingBlockControllerType1(-160, {timeExists: 6}));
-  //    break;
+      Nakama.block.push(new GrowingBlockControllerType1(-160, {timeExists: 6}));
+      break;
     case 9:
        Nakama.block.push(new MovingBlockType1Controller(-54,
          Math.round(Math.random()+1),
          {tweenTime: 1, minX : 280, maxX: 680, timeDelay : 1}));
        break;
     case 10:
-      Nakama.block.push(new SpinningBlockType2Controller(-161))
+      Nakama.block.push(new SpinningBlockType2Controller(-161));
       break;
     case 11:
-      Nakama.block.push(new SpinningBlockType1Controller(-161))
+      Nakama.block.push(new SpinningBlockType1Controller(-161));
       break;
   }
 }
