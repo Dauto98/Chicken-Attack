@@ -2,7 +2,7 @@ class ChickenController {
   constructor(x,y,configs){
     this.sprite = Nakama.chickenGroup.create(x, y, "chicken");
 
-    this.sprite.scale.setTo(0.2, 0.2);
+    this.sprite.scale.setTo(0.35, 0.35);
     this.sprite.anchor = new Phaser.Point(0.5 , 0.5);
     this.configs = configs;
     this.sprite.animations.add('walk');
@@ -41,10 +41,7 @@ update(){
     this.sprite.animations.play('walk',this.chickenFramePerSecond, true);
 
     if(this.sprite.health == 0)
-    {
       this.sprite.destroy();
-      //Nakama.chicken.splice(0,1);
-    }
     if(this.invulnerableState == false) this.sprite.tint = 0xffffff;
     else if(this.invulnerableState == true) this.sprite.tint = 0xff0000;
     if(this.timeSinceStart >= 2){

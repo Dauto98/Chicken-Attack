@@ -95,7 +95,6 @@ var create = function(){
   });
 
   new Lines_longStraight(Nakama.game.world.width/2, Nakama.leftlinesGroup);
-  Nakama.chicken.push(new ChickenController(300,500));
 }
 
 // update game state each frame
