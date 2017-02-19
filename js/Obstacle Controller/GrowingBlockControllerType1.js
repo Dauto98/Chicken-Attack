@@ -25,7 +25,5 @@ class GrowingBlockControllerType1 {
       }
     }
     else this.sprite.destroy();
-    console.log(this.timeToScale);
-    console.log(this.timeToScale2 + '||');
   }
 }

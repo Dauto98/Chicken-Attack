@@ -11,7 +11,7 @@ Nakama.configs = {
 };
 
 window.onload = function(){
-  Nakama.game = new Phaser.Game(960,960,Phaser.AUTO,'',
+  Nakama.game = new Phaser.Game(960,960,Phaser.CANVAS,'',
     {
       preload: preload,
       create: create,
@@ -33,9 +33,9 @@ var preload = function(){
   Nakama.game.time.advancedTiming = true;
 
   Nakama.game.load.atlasJSONHash('assets', 'Assets/assets.png', 'Assets/assets.json');
-  Nakama.game.load.atlasJSONHash('sheet1', 'Assets/Spritesheet-1.png', 'Assets/Spritesheet-1.json');
-  Nakama.game.load.atlasJSONHash('sheet2', 'Assets/Spritesheet-2.png', 'Assets/Spritesheet-2.json');
-  Nakama.game.load.atlasJSONHash('sheet3', 'Assets/Spritesheet-3.png', 'Assets/Spritesheet-3.json');
+  Nakama.game.load.atlasJSONHash('sheet1', 'Assets/Map.png', 'Assets/Map.json');
+  Nakama.game.load.atlasJSONHash('sheet2', 'Assets/Block.png', 'Assets/Block.json');
+  Nakama.game.load.atlasJSONHash('sheet3', 'Assets/Line.png', 'Assets/Line.json');
   Nakama.game.load.spritesheet('chicken', 'Assets/chicken3.png', 117, 155);
 }
 
@@ -60,19 +60,19 @@ var create = function(){
   Nakama.block        = [];
   Nakama.enemyLaser   = [];
   Nakama.enemyBullet  = [];
+  Nakama.lines        = [];
+  Nakama.checkOverlap = [];
 
   Nakama.timeToSpawnAnEnemy = 0;
 
   new Lines_longStraight(Nakama.game.world.width/2, Nakama.leftlinesGroup);
-
-  Nakama.block.push(new GrowingBlockControllerType1(500,500,{
-    timeExists : 6
-  }));
   Nakama.chicken.push(new ChickenController(300,800));
 }
 
 // update game state each frame
 var update = function(){
+
+
   //Cheat code 500,000 health
   if(Nakama.keyboard.isDown(Phaser.Keyboard.Q)) {
     if(Nakama.keyboard.isDown(Phaser.Keyboard.W)){
@@ -125,10 +125,9 @@ var update = function(){
   //check overlap for every sprite in 2 array Chicken and EnemyLaser
   for(var i = 0; i < Nakama.chicken.length; i++){
     for(var j = 0; j < Nakama.enemyLaser.length; j++){
-      if(checkOverlap(Nakama.enemyLaser[j].sprite, Nakama.chicken[i].sprite)){
-        Nakama.chicken[i].damage();
+        if(checkOverlap(Nakama.enemyLaser[j].sprite,Nakama.chicken[i].sprite))
+          Nakama.chicken[i].damage();
       }
-    }
   }
 
   Nakama.game.physics.arcade.overlap(Nakama.bulletGroup,
@@ -138,7 +137,7 @@ var update = function(){
 
 // before camera render (mostly for debug)
 var render = function(){
-  Nakama.game.debug.body(Nakama.linesGroup);
+  Nakama.game.debug.body;
 }
 
 //Check if two sprites overlap or not.
@@ -158,28 +157,28 @@ var randomLines = function(){
   var lineID = Math.floor(Math.random() * 8);
   switch (lineID) {
     case 0:
-      new Lines_roundHole();
+      Nakama.lines.push(new Lines_roundHole());
       break;
     case 1:
-      new Lines_longStraight();
+      Nakama.lines.push(new Lines_longStraight());
       break;
     case 2:
-      new Lines_squareHole();
+      Nakama.lines.push(new Lines_squareHole());
       break;
     case 3:
-      new Lines_hexaHole();
+      Nakama.lines.push(new Lines_hexaHole());
       break;
     case 4:
-      new Lines_octaHole();
+      Nakama.lines.push(new Lines_octaHole());
       break;
     case 5:
-      new Lines_pointLeft();
+      Nakama.lines.push(new Lines_pointLeft());
       break;
     case 6:
-      new Lines_pointRight();
+      Nakama.lines.push(new Lines_pointRight());
       break;
     case 7:
-      new Lines_eightHole();
+      Nakama.lines.push(new Lines_eightHole());
       break;
   }
 }
