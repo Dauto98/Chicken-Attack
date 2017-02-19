@@ -7,7 +7,7 @@ Nakama.configs = {
   enemyBulletCooldown : 0.4,
   timeToSpawnAnEnemy  : 5,
   obstaclesCooldown   : 5,
-  linesSpeed          : 300
+  linesSpeed          : 1000
 
 };
 
@@ -94,10 +94,7 @@ var create = function(){
 
 // update game state each frame
 var update = function(){
-  if(Nakama.chicken[0].sprite.alive){
-    Nakama.score += Nakama.game.time.physicsElapsed;
-  }
-  else Nakama.score += 0;
+  //health
   if(Nakama.chicken.length != 0){
     switch(Nakama.chicken[0].sprite.health){
       case 1 : {
@@ -124,10 +121,16 @@ var update = function(){
     }
   }
   scoreBoard.scale.setTo(0.3,0.3);
-  console.log(Nakama.chicken[0].sprite.health);
+  // console.log(Nakama.chicken[0].sprite.health);
+
+  //score
+  if(Nakama.chicken[0].sprite.alive){
+    Nakama.score += Nakama.game.time.physicsElapsed;
+  } else Nakama.score += 0;
   Nakama.game.add.text(140 , 862, Math.round(Nakama.score), {
     fontSize : '30px',
-    fontWeight : 'bold'});
+    fontWeight : 'bold'
+  });
 
   //Cheat code 500,000 health
   if(Nakama.keyboard.isDown(Phaser.Keyboard.Q)) {
@@ -190,20 +193,24 @@ var update = function(){
     }
   }
 
-  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup,
-    Nakama.chickenGroup,
-    onBulletHitChicken);
+  // check bullet hit chicken 
+  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.chickenGroup, onBulletHitChicken);
 
-    if(!Nakama.chicken[0].sprite.alive) {
-      if(Nakama.score > Nakama.highScore) Nakama.highScore = Nakama.score;
-      var gameOver = Nakama.game.add.image(480 , 380, 'gameOver');
-      Nakama.game.world.bringToTop(gameOver);
-      gameOver.anchor.set(0.5);
-      var restart = Nakama.game.add.image(480, 580, 'restart')
-      restart.anchor.set(0.5);
-      if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-        Nakama.game.state.restart();
+  //game over and restart state
+  if(!Nakama.chicken[0].sprite.alive) {
+    if(Nakama.score > Nakama.highScore){
+      Nakama.highScore = Nakama.score;
     }
+    var gameOver = Nakama.game.add.image(480 , 380, 'gameOver');
+    Nakama.game.world.bringToTop(gameOver);
+    gameOver.anchor.set(0.5);
+
+    var restart = Nakama.game.add.image(480, 580, 'restart')
+    restart.anchor.set(0.5);
+    if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+      Nakama.game.state.restart();
+    }
+  }
 }
 
 // before camera render (mostly for debug)

@@ -14,11 +14,10 @@ class EnemyLaserController {
 
   update() {
     this.timeExists += Nakama.game.time.physicsElapsed;
-    if(this.timeExists > 1.5|| !this.enemy.alive)
-      {
-        this.sprite.kill();
-        Nakama.enemyLaser.splice(Nakama.enemyLaser.indexOf(this), 1);
-      }
+    if(this.timeExists > 1.5|| !this.enemy.alive){
+      this.sprite.kill();
+      Nakama.enemyLaser.splice(Nakama.enemyLaser.indexOf(this), 1);
+    }
     //Make the laser move with enemy
     this.sprite.position.x = this.enemy.position.x;
     this.sprite.position.y = this.enemy.position.y;

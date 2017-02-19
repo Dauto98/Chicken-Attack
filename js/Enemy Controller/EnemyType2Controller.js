@@ -13,8 +13,7 @@ class EnemyType2Controller{
     this.configs = configs;
     this.sprite.anchor = new Phaser.Point(0.5 , 0.5);
     this.timeSpriteAlive = 0;
-    this.sprite.body.velocity =
-      this.direction.setMagnitude(Nakama.configs.enemyType1Speed);
+    this.sprite.body.velocity = this.direction.setMagnitude(Nakama.configs.enemyType1Speed);
     this.sprite.body.collideWorldBounds = true;
     this.timeSinceLastFire = 0;
   }
