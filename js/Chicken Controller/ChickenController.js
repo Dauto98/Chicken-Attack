@@ -52,10 +52,10 @@ update(){
 
   damage(){
     if(this.invulnerableState == false){
-      Nakama.chickenSound.play();
+      if(this.sprite.alive) Nakama.chickenSound.play();
       this.sprite.health -= 1;
       this.toggleInvulnerable();
-      Nakama.game.time.events.add(2000, this.toggleInvulnerable, this);
+      Nakama.game.time.events.add(1000, this.toggleInvulnerable, this);
     }
   }
 

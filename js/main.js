@@ -51,7 +51,7 @@ var preload = function(){
   Nakama.game.load.image('gameOver2', 'Assets/gameOver2.png');
   Nakama.game.load.image('gameOver3', 'Assets/gameOver3.png');
   Nakama.game.load.image('gameOver4', 'Assets/gameOver4.png');
-  Nakama.game.load.image('restart','Assets/Restart-1.png');
+  Nakama.game.load.image('restart','Assets/restart.png');
   Nakama.game.load.audio('chickenAttack', 'Assets/chicken-attack.mp3');
   Nakama.game.load.audio('chickenSound', 'Assets/chicken-sound.mp3');
 }
@@ -106,6 +106,8 @@ var create = function(){
   });
   Nakama.gameOver = Nakama.game.add.image(480 , 380, 'gameOver1');
   Nakama.gameOver.visible = false;
+  Nakama.restart = Nakama.game.add.image(480, 580, 'restart');
+  Nakama.restart.visible = false;
 
   new Lines_longStraight(Nakama.game.world.width/2, Nakama.leftlinesGroup);
 }
@@ -143,6 +145,7 @@ var update = function(){
     Nakama.score += 0;
     if(Nakama.score > Nakama.highScore) Nakama.highScore = Nakama.score;
     Nakama.gameOver.visible = true;
+    Nakama.restart.visible = true;
     switch(Math.floor(Nakama.score)%4){
       case 0:  Nakama.gameOver.loadTexture('gameOver1',0);
                break;
@@ -154,8 +157,7 @@ var update = function(){
                break;
    }
     Nakama.gameOver.anchor.set(0.5);
-    var restart = Nakama.game.add.image(480, 580, 'restart')
-    restart.anchor.set(0.5);
+    Nakama.restart.anchor.set(0.5);
     if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
       Nakama.backgroundMusic.destroy();
       Nakama.game.state.restart();
