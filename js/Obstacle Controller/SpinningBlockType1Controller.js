@@ -1,15 +1,16 @@
 "use strict";
 class SpinningBlockType1Controller {
-  constructor(x,y,configs) {
-    this.sprite = Nakama.blockGroup.create(
-      x,
+  constructor(y,configs) {
+    this.sprite = Nakama.linesGroup.create(
+      Nakama.game.world.width/2,
       y,
-      "assets",
-      "Spaceship1-Player.png"
+      "sheet2",
+      "Block.png"
     );
     this.sprite.anchor = new Phaser.Point(0.5 , 0.5);
     this.sprite.angle = 0;
     this.timeSinceLastSpin = 0;
+    this.sprite.body.velocity.y = Nakama.configs.linesSpeed;
   }
 
   update(){

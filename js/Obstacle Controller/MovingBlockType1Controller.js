@@ -1,13 +1,11 @@
 class MovingBlockType1Controller{
-  constructor(x,y,directionType,configs){
-    this.sprite = Nakama.blockGroup.create(
-      x,
+  constructor(y, directionType, configs){
+    this.sprite = Nakama.linesGroup.create(
+      Nakama.game.world.width/2,
       y,
-      "assets",
-      "EnemyType3.png"
+      "sheet2",
+      "Block4.1.png"
     );
-    this.x = x;
-    this.y = y;
     //this property decides if the sprite moves left or right first when started
     //moving
     this.directionType = directionType;
@@ -19,6 +17,7 @@ class MovingBlockType1Controller{
     this.timeDelay = 0;
     this.configs.centerX = (this.configs.minX + this.configs.maxX)/2;
     this.configs.movementDistance = (this.configs.maxX - this.configs.minX)/2;
+    this.sprite.body.velocity.y = Nakama.configs.linesSpeed;
   }
 
   update(){
@@ -39,12 +38,8 @@ class MovingBlockType1Controller{
     else{
       //Harmonic motion algorithm in Phaser
       this.timeSinceLastSpawn += Nakama.game.time.physicsElapsed;
-      this.sprite.position.x =
-      this.configs.centerX +
-      this.configs.movementDistance *
-      Math.sin(this.timeSinceLastSpawn/this.configs.tweenTime * Math.PI * 2)
-      * this.directionIndex;
-    // console.log(this.timeMoving);
+      this.sprite.position.x = this.configs.centerX + this.configs.movementDistance * Math.sin(this.timeSinceLastSpawn/this.configs.tweenTime * Math.PI * 2) * this.directionIndex;
+    console.log(this.timeMoving);
     }
   }
 }

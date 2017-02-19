@@ -1,16 +1,17 @@
 class GrowingBlockControllerType1 {
-  constructor(x , y , configs){
-    this.sprite = Nakama.blockGroup.create(
-    x,
+  constructor(y , configs){
+    this.sprite = Nakama.linesGroup.create(
+    Nakama.game.world.width/2,
     y,
-    "assets",//png file here
-    "Spaceship1-Player.png"
+    "sheet2",//png file here
+    "Block3.png"
   );
     this.configs = configs;
     this.sprite.anchor = new Phaser.Point(0.5 , 0.5);
     this.timeToScale = 2;
     this.timeToScale2 = 4;
     this.timeExists = 0;
+    this.sprite.body.velocity.y = Nakama.configs.linesSpeed;
   }
 
   update(){

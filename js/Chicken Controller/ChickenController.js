@@ -1,6 +1,5 @@
 class ChickenController {
   constructor(x,y,configs){
-<<<<<<< HEAD
     this.sprite = Nakama.chickenGroup.create(x, y, "chicken");
 
     this.sprite.scale.setTo(0.2, 0.2);
@@ -21,14 +20,10 @@ class ChickenController {
 update(){
     this.sprite.position = Nakama.game.input.activePointer;
 
-
     this.shouldCheckBackgroundColor++;
     if(this.shouldCheckBackgroundColor == 1){
       if(this.ctx){
-        var imgData = this.ctx.getImageData(
-          this.sprite.position.x,
-          this.sprite.position.y,
-          1,1);
+        var imgData = this.ctx.getImageData(this.sprite.position.x, this.sprite.position.y, 1, 1);
 
         this.inPath = true;
         for(var j = 0; j < 4; j++){
@@ -37,8 +32,7 @@ update(){
         }
       }
       this.sprite.alpha = 1;
-    }
-    else if(this.shouldCheckBackgroundColor == 10){
+    } else if(this.shouldCheckBackgroundColor == 10){
       this.shouldCheckBackgroundColor = 0;
 
       this.sprite.alpha = 0;
@@ -46,9 +40,17 @@ update(){
     console.log(this.inPath);
 
     this.sprite.animations.play('walk',this.chickenFramePerSecond, true);
-    if(this.sprite.health == 0) this.sprite.kill();
-    if(this.invulnerableState == false) this.sprite.tint = 0xffffff;
-    else if(this.invulnerableState == true) this.sprite.tint = 0xff0000;
+    if(this.sprite.health == 0){
+      this.sprite.kill();
+    }
+    if(this.invulnerableState == false){
+      this.sprite.tint = 0xffffff;
+    } else if(this.invulnerableState == true){
+      this.sprite.tint = 0xff0000;
+    }
+    if (this.inPath === false) {
+      this.damage();
+    }
   }
 
   damage(){

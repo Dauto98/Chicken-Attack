@@ -7,7 +7,8 @@ Nakama.configs = {
   enemyBulletSpeed    : 300,
   enemyBulletCooldown : 0.4,
   timeToSpawnAnEnemy  : 5,
-  linesSpeed : 300
+  obstaclesCooldown   : 5,
+  linesSpeed          : 500
 };
 
 window.onload = function(){
@@ -47,12 +48,13 @@ var create = function(){
   Nakama.game.input.activePointer.x = Nakama.game.world.width/2;
   Nakama.game.input.activePointer.y = Nakama.game.world.height/2;
 
+  // background
   Nakama.background = Nakama.game.add.tileSprite(0, 0, Nakama.game.world.width, Nakama.game.world.height, "sheet1", "Map3.png");
 
   Nakama.linesGroup      = Nakama.game.add.physicsGroup();
   Nakama.chickenGroup    = Nakama.game.add.physicsGroup();
   Nakama.bulletGroup     = Nakama.game.add.physicsGroup();
-  Nakama.blockGroup      = Nakama.game.add.physicsGroup();
+  // Nakama.blockGroup      = Nakama.game.add.physicsGroup();
   Nakama.enemyGroup      = Nakama.game.add.physicsGroup();
   Nakama.laserGroup      = Nakama.game.add.physicsGroup();
 
@@ -65,19 +67,22 @@ var create = function(){
   Nakama.checkOverlap = [];
 
   Nakama.timeToSpawnAnEnemy = 0;
+  Nakama.timeToSpawnAnObstacle = 0;
 
+  // starting block
   Nakama.startingPoint = Nakama.linesGroup.create(Nakama.game.world.width/2, Nakama.game.world.height/2, 'starting');
   Nakama.startingPoint.anchor = new Phaser.Point(0.5, 0.5);
   Nakama.startingPoint.body.velocity.y = Nakama.configs.linesSpeed;
 
+  // first line is straight line
   Nakama.firstLine = new Lines_longStraight();
-  Nakama.chicken.push(new ChickenController(Nakama.game.world.width/2,800));
+
+  // add chicken
+  Nakama.chicken.push(new ChickenController(Nakama.game.world.width/2, 800));
 }
 
 // update game state each frame
 var update = function(){
-
-
   //Cheat code 500,000 health
   if(Nakama.keyboard.isDown(Phaser.Keyboard.Q)) {
     if(Nakama.keyboard.isDown(Phaser.Keyboard.W)){
@@ -91,13 +96,14 @@ var update = function(){
   //bring the chicken sprite on top of others.
   Nakama.game.world.bringToTop(Nakama.chickenGroup);
 
+  //run background
   Nakama.background.tilePosition.y += 1;
 
+  //randomLines
   if (Nakama.linesGroup.children[Nakama.linesGroup.children.length - 1].position.y >= Nakama.linesGroup.children[Nakama.linesGroup.children.length - 1].height/2 - 20) {
     randomLines();
   }
 
-  Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
   for(var i = 0; i < Nakama.chicken.length; i++){
     Nakama.chicken[i].update();
   }
@@ -114,6 +120,7 @@ var update = function(){
   }
 
   //randomly create an enemy between type 1 and type 2 after each ... seconds.
+  Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
   if(Nakama.timeToSpawnAnEnemy >= Nakama.configs.timeToSpawnAnEnemy) {
     if(Math.round(Math.random())>=0.5){
       //random position.y and directionType for this enemy.
@@ -135,15 +142,12 @@ var update = function(){
       }
   }
 
-  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup,
-    Nakama.chickenGroup,
-    onBulletHitChicken);
+  //check bullets hit chicken
+  Nakama.game.physics.arcade.overlap(Nakama.bulletGroup, Nakama.chickenGroup, onBulletHitChicken);
 }
 
 // before camera render (mostly for debug)
-var render = function(){
-  Nakama.game.debug.body;
-}
+var render = function(){}
 
 //Check if two sprites overlap or not.
 //Check Sprite image, not body physic ( overlap without physics)
@@ -159,7 +163,7 @@ var onBulletHitChicken = function(bulletSprite){
 }
 
 var randomLines = function(){
-  var lineID = Math.floor(Math.random() * 8);
+  var lineID = Math.floor(Math.random() * 13);
   switch (lineID) {
     case 0:
       Nakama.lines.push(new Lines_roundHole());
@@ -184,6 +188,21 @@ var randomLines = function(){
       break;
     case 7:
       Nakama.lines.push(new Lines_eightHole());
+      break;
+    case 8:
+      Nakama.block.push(new GrowingBlockControllerType1(-160, {timeExists: 6}));
+      break;
+    case 9:
+      // Nakama.block.push(new MovingBlockType1Controller(-54, 1, {tweenTime: 3, timeDelay: 2, minX : 200, maxX: 700}));
+      // break;
+    case 10:
+      // Nakama.block.push(new MovingBlockType2Controller(-161, {tweenTime: 3, minY: 200, maxY: 600}));
+      // break;
+    case 11:
+      Nakama.block.push(new SpinningBlockType2Controller(-161))
+      break;
+    case 12:
+      Nakama.block.push(new SpinningBlockType1Controller(-161))
       break;
   }
 }
