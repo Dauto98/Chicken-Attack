@@ -4,8 +4,7 @@ class SpinningBlockType2Controller {
     this.sprite = Nakama.linesGroup.create(
       Nakama.game.world.width/2,
       y,
-      "sheet2",
-      "Block2.png"
+      'Block2'
     );
     this.sprite.scale.setTo(1.5,1.5);
     this.sprite.anchor = new Phaser.Point(0.5, 0.5);

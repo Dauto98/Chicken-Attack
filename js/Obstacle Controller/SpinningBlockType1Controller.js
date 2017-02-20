@@ -16,8 +16,8 @@ class SpinningBlockType1Controller {
 
   update(){
       this.timeSinceLastSpin += Nakama.game.time.physicsElapsed;
-      //Change angle every 0.8s
-      if(this.timeSinceLastSpin >= 0.8) {
+      //Change angle every 1.3s
+      if(this.timeSinceLastSpin >= 1.3) {
         this.sprite.angle += 90;
         this.timeSinceLastSpin = 0;
     }
