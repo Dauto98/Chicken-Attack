@@ -1,4 +1,5 @@
 var Nakama = {};
+Nakama.highScore = 0;
 Nakama.configs = {
   chickenHealth       : 5,
   enemyType1Speed     : 100,
@@ -46,13 +47,9 @@ var preload = function(){
   Nakama.game.load.image('healthBar4', 'Assets/healthdemo4.png');
   Nakama.game.load.image('healthBar5', 'Assets/healthdemo5.png');
   Nakama.game.load.image('healthBar0', 'Assets/healthdemo0.png');
+  Nakama.game.load.image('gameOver','Assets/restart.png');
   Nakama.game.load.image('score', 'Assets/score.png');
-  Nakama.game.load.image('gameOver1', 'Assets/gameOver1.png');
-  Nakama.game.load.image('gameOver2', 'Assets/gameOver2.png');
-  Nakama.game.load.image('gameOver3', 'Assets/gameOver3.png');
-  Nakama.game.load.image('gameOver4', 'Assets/gameOver4.png');
-  Nakama.game.load.image('restart','Assets/restart.png');
-  Nakama.game.load.audio('chickenAttack', 'Assets/chicken-attack.mp3');
+  Nakama.game.load.audio('chickenAttack', 'Assets/Arcade-Funk.mp3');
   Nakama.game.load.audio('chickenSound', 'Assets/chicken-sound.mp3');
 }
 
@@ -63,13 +60,13 @@ var create = function(){
   Nakama.game.input.activePointer.x = Nakama.game.world.width/2;
   Nakama.game.input.activePointer.y = Nakama.game.world.height/2;
   Nakama.backgroundMusic = Nakama.game.add.audio('chickenAttack');
-  Nakama.backgroundMusic.volume = 0.4;
+  Nakama.backgroundMusic.volume = 0.6;
   Nakama.backgroundMusic.loop = true;
   Nakama.backgroundMusic.play();
   Nakama.chickenSound = Nakama.game.add.audio('chickenSound');
 
   Nakama.background = Nakama.game.add.tileSprite(0, 0,
-      Nakama.game.world.width, Nakama.game.world.height, "sheet1", "Map3.png");
+      Nakama.game.world.width, Nakama.game.world.height, "sheet1", "map1.png");
 
   Nakama.linesGroup      = Nakama.game.add.physicsGroup();
   Nakama.chickenGroup    = Nakama.game.add.physicsGroup();
@@ -97,17 +94,22 @@ var create = function(){
   // add chicken
   Nakama.chicken.push(new ChickenController(Nakama.game.world.width/2, 800));
   Nakama.score = 0;
-  Nakama.highScore;
   Nakama.healthBar = Nakama.game.add.image(0,0,'healthBar5');
   Nakama.scoreBar = Nakama.game.add.image(780,-10,'score');
   Nakama.scoreDisplay = Nakama.game.add.text(860, 70, 0, {
-    fontSize : '30px',
-    fontFamily  : 'Helvetica'
+    fontSize    : '30px'
   });
-  Nakama.gameOver = Nakama.game.add.image(480 , 380, 'gameOver1');
+  Nakama.scoreDisplayWhenGameOver = Nakama.game.add.text(480 , 380, 0, {
+    fontSize    : '60px'
+  });
+  Nakama.scoreDisplayWhenGameOver.visible = false;
+
+  Nakama.highScoreDisplay = Nakama.game.add.text(480 , 600, 0, {
+    fontSize    : '60px'
+  });
+  Nakama.highScoreDisplay.visible = false;
+  Nakama.gameOver = Nakama.game.add.image(480 , 480, 'gameOver');
   Nakama.gameOver.visible = false;
-  Nakama.restart = Nakama.game.add.image(480, 580, 'restart');
-  Nakama.restart.visible = false;
 
   new Lines_longStraight(Nakama.game.world.width/2, Nakama.leftlinesGroup);
 }
@@ -116,6 +118,8 @@ var create = function(){
 var update = function(){
   //bring the chicken sprite on top of others.
   Nakama.game.world.bringToTop(Nakama.chickenGroup);
+  Nakama.game.world.bringToTop(Nakama.scoreDisplayWhenGameOver);
+  Nakama.game.world.bringToTop(Nakama.highScoreDisplay);
 
   if(Nakama.chicken[0].sprite.alive){
     Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
@@ -143,21 +147,16 @@ var update = function(){
 
   else {
     Nakama.score += 0;
-    if(Nakama.score > Nakama.highScore) Nakama.highScore = Nakama.score;
+    if(Math.round(Nakama.score) > Nakama.highScore)
+      Nakama.highScore = Math.round(Nakama.score);
     Nakama.gameOver.visible = true;
-    Nakama.restart.visible = true;
-    switch(Math.floor(Nakama.score)%4){
-      case 0:  Nakama.gameOver.loadTexture('gameOver1',0);
-               break;
-      case 1:  Nakama.gameOver.loadTexture('gameOver2',0);
-               break;
-      case 2:  Nakama.gameOver.loadTexture('gameOver3',0);
-               break;
-      case 3:  Nakama.gameOver.loadTexture('gameOver4',0);
-               break;
-   }
     Nakama.gameOver.anchor.set(0.5);
-    Nakama.restart.anchor.set(0.5);
+    Nakama.scoreDisplayWhenGameOver.visible = true;
+    Nakama.scoreDisplayWhenGameOver.anchor.set(0.5);
+    Nakama.scoreDisplayWhenGameOver.setText(Math.round(Nakama.score));
+    Nakama.highScoreDisplay.visible = true;
+    Nakama.highScoreDisplay.anchor.set(0.5);
+    Nakama.highScoreDisplay.setText(Nakama.highScore);
     if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
       Nakama.backgroundMusic.destroy();
       Nakama.game.state.restart();
@@ -201,13 +200,12 @@ var update = function(){
     }}}}
 
   //run background
-  Nakama.background.tilePosition.y += 1;
+  Nakama.background.tilePosition.y += 2;
   var a = Nakama.linesGroup.children.length;
   if (Nakama.linesGroup.children[a - 1].position.y >=
           Nakama.linesGroup.children[a - 1].height/2 - 10) {
     randomLines();
   }
-
   Nakama.chicken[0].update();
 
   var b = Nakama.block.length;

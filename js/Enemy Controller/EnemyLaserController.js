@@ -6,6 +6,7 @@ class EnemyLaserController {
       "assets",
       "BulletType3.png"
     );
+    this.sprite.scale.setTo(1,1.5);
     this.enemy = enemy;
     this.sprite.angle = angle;
     this.sprite.anchor = anchor;

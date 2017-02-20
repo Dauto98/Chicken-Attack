@@ -27,7 +27,8 @@ update(){
 
         this.inPath = true;
         for(var j = 0; j < 4; j++){
-          if(imgData.data[j] != 255) this.inPath = false;
+          if(imgData.data[j] != 255)
+          this.inPath = false;
           break;
         }
       }
@@ -37,7 +38,6 @@ update(){
 
       this.sprite.alpha = 0;
     }
-
     this.sprite.animations.play('walk',this.chickenFramePerSecond, true);
 
     if(this.sprite.health == 0)
