@@ -50,12 +50,11 @@ update(){
     this.shouldCheckBackgroundColor = 0;
     this.sprite.alpha = 0;
   }
-  console.log(this.inPath);
+  // console.log(this.inPath);
 
   //destroy when die
   if(this.sprite.health == 0){
     this.sprite.destroy();
-    //Nakama.chicken.splice(0,1);
   }
 
   //change color while invulnerable

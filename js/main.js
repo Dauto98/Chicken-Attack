@@ -58,19 +58,18 @@ var create = function(){
   Nakama.keyboard = Nakama.game.input.keyboard;
   Nakama.game.input.activePointer.x = Nakama.game.world.width/2;
   Nakama.game.input.activePointer.y = Nakama.game.world.height/2;
+
   Nakama.backgroundMusic = Nakama.game.add.audio('chickenAttack');
   Nakama.backgroundMusic.volume = 0.6;
   Nakama.backgroundMusic.loop = true;
   Nakama.backgroundMusic.play();
   Nakama.chickenSound = Nakama.game.add.audio('chickenSound');
 
-  Nakama.background = Nakama.game.add.tileSprite(0, 0,
-      Nakama.game.world.width, Nakama.game.world.height, "sheet1", "map1.png");
+  Nakama.background = Nakama.game.add.tileSprite(0, 0, Nakama.game.world.width, Nakama.game.world.height, "sheet1", "map1.png");
 
   Nakama.linesGroup      = Nakama.game.add.physicsGroup();
   Nakama.chickenGroup    = Nakama.game.add.physicsGroup();
   Nakama.bulletGroup     = Nakama.game.add.physicsGroup();
-  // Nakama.blockGroup      = Nakama.game.add.physicsGroup();
   Nakama.enemyGroup      = Nakama.game.add.physicsGroup();
   Nakama.laserGroup      = Nakama.game.add.physicsGroup();
 
@@ -79,6 +78,7 @@ var create = function(){
   Nakama.block        = [];
   Nakama.enemyLaser   = [];
   Nakama.enemyBullet  = [];
+
   Nakama.timeToSpawnAnEnemy = 0;
   Nakama.timeToSpawnAnObstacle = 0;
 
@@ -93,7 +93,7 @@ var create = function(){
   // add chicken
   Nakama.chicken.push(new ChickenController(Nakama.game.world.width/2, 800));
 
-  // add score
+  // add score and health bar
   Nakama.score = 0;
   Nakama.healthBar = Nakama.game.add.image(0,0,'healthBar5');
   Nakama.scoreBar = Nakama.game.add.image(780,-10,'score');
@@ -112,7 +112,6 @@ var create = function(){
   Nakama.highScoreDisplay.visible = false;
   Nakama.gameOver = Nakama.game.add.image(480 , 480, 'gameOver');
   Nakama.gameOver.visible = false;
-
 }
 
 // update game state each frame
@@ -129,28 +128,23 @@ var update = function(){
     //randomly create an enemy between type 1 and type 2 after each ... seconds.
     Nakama.timeToSpawnAnEnemy += Nakama.game.time.physicsElapsed;
     if(Nakama.timeToSpawnAnEnemy >= Nakama.configs.timeToSpawnAnEnemy) {
+      //random position.y and directionType for this enemy.
       if(Math.round(Math.random())>=0.5){
-        //random position.y and directionType for this enemy.
-        Nakama.enemies.push(new EnemyType1Controller(
-          Nakama.game.world.width - 20,
-          Math.round(Math.random()*600 + 100),
-          Math.round(Math.random()+1)));
+        Nakama.enemies.push(new EnemyType1Controller(Nakama.game.world.width - 20, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
         Nakama.timeToSpawnAnEnemy = 0;
-      }
-      else{
+      } else{
         //random position.x and directionType for this enemy.
-        Nakama.enemies.push(new EnemyType2Controller(
-          20,
-          Math.round(Math.random()*600 + 100),
-          Math.round(Math.random()+1)));
+        Nakama.enemies.push(new EnemyType2Controller(20, Math.round(Math.random()*600 + 100), Math.round(Math.random()+1)));
         Nakama.timeToSpawnAnEnemy = 0;
       }
     }
   } else {
     Nakama.score += 0;
-
-    if(Math.round(Nakama.score) > Nakama.highScore)
+    //check highScore
+    if(Math.round(Nakama.score) > Nakama.highScore){
       Nakama.highScore = Math.round(Nakama.score);
+    }
+    //display endgame score
     Nakama.gameOver.visible = true;
     Nakama.gameOver.anchor.set(0.5);
     Nakama.scoreDisplayWhenGameOver.visible = true;
@@ -159,12 +153,14 @@ var update = function(){
     Nakama.highScoreDisplay.visible = true;
     Nakama.highScoreDisplay.anchor.set(0.5);
     Nakama.highScoreDisplay.setText(Nakama.highScore);
+    //restart when press SPACEBAR
     if(Nakama.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
       Nakama.backgroundMusic.destroy();
       Nakama.game.state.restart();
     }
   }
 
+  //display healthBar
   switch(Nakama.chicken[0].sprite.health){
       case 1 : {
         Nakama.healthBar.loadTexture('healthBar1',0);
@@ -190,7 +186,6 @@ var update = function(){
         Nakama.healthBar.loadTexture('healthBar0',0);
       }
   }
-
   Nakama.healthBar.scale.setTo(0.22,0.22);
   Nakama.scoreBar.scale.setTo(0.22,0.22);
   Nakama.scoreDisplay.setText(Math.round(Nakama.score));
@@ -204,13 +199,15 @@ var update = function(){
     }}}}
 
   //run background
-
   Nakama.background.tilePosition.y += 2;
 
+  //randomLines
   var a = Nakama.linesGroup.children.length;
   if (Nakama.linesGroup.children[a - 1].position.y >= Nakama.linesGroup.children[a - 1].height/2 - 10) {
     randomLines();
   }
+
+  //update game objects
   Nakama.chicken[0].update();
 
   var b = Nakama.block.length;
